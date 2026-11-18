@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Programy lekowe NFZ – pacjenci i wydatki</title>
+<style>
+:root{color-scheme:light;
+ --page:#f9f9f7;--surface:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--grid:#e1e0d9;--axis:#c3c2b7;--ring:rgba(11,11,11,.10);
+ --s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100;--s5:#e87ba4;--s6:#008300;--s7:#6250d6;--s8:#e34948;--other:#b4b2ab;
+ --up:#006300;--down:#d03b3b;--land:#f0efec;--sel:#eb6834;--wash:rgba(42,120,214,.07)}
+@media (prefers-color-scheme:dark){:root{color-scheme:dark;
+ --page:#0d0d0d;--surface:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--muted:#898781;--grid:#2c2c2a;--axis:#383835;--ring:rgba(255,255,255,.10);
+ --s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--s5:#d55181;--s6:#008300;--s7:#9085e9;--s8:#e66767;--other:#5d5c58;
+ --up:#0ca30c;--down:#e66767;--land:#242422;--sel:#d95926;--wash:rgba(57,135,229,.12)}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--ink);font:14px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+header{padding:20px 24px 8px;max-width:1400px;margin:0 auto}
+h1{font-size:20px;margin:0 0 4px;font-weight:650}
+.sub{color:var(--ink2);font-size:13px}
+.filters{position:sticky;top:0;z-index:5;background:var(--page);border-bottom:1px solid var(--ring)}
+.frow{max-width:1400px;margin:0 auto;padding:10px 24px;display:flex;gap:10px;flex-wrap:wrap;align-items:end}
+.f{display:flex;flex-direction:column;gap:3px;min-width:150px;flex:1}
+.f.wide{flex:2;min-width:240px}
+.f label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+select,button{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--ring);border-radius:8px;padding:7px 9px;max-width:100%}
+button{cursor:pointer}
+button:hover{background:var(--wash)}
+main{max-width:1400px;margin:0 auto;padding:14px 24px 40px}
+#scope{font-size:13px;color:var(--ink2);margin:2px 0 12px}
+.kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+.tile,.card{background:var(--surface);border:1px solid var(--ring);border-radius:12px}
+.tile{padding:12px 14px}
+.tl{font-size:12px;color:var(--ink2)}
+.tv{font-size:28px;font-weight:600;margin:2px 0}
+.ts{font-size:12px;color:var(--muted)}
+.na{color:var(--muted);font-size:20px}
+.delta.up{color:var(--up)}.delta.down{color:var(--down)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.card{padding:14px 16px;min-width:0}
+.card h2{font-size:15px;margin:0;font-weight:620}
+.card .cs{font-size:12px;color:var(--muted);margin:2px 0 8px}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:var(--ink2);margin-top:6px}
+.lg{display:inline-flex;align-items:center;gap:6px}
+.sw{display:inline-block;width:10px;height:10px;border-radius:3px;flex:none}
+.sw.ln{height:0;width:16px;border-top:2px solid;border-radius:0;background:none}
+.sw.ln.dash{border-top-style:dashed}
+svg text.tick{fill:var(--muted);font-size:11px;font-variant-numeric:tabular-nums}
+svg line.grid{stroke:var(--grid);stroke-width:1}
+svg line.axis{stroke:var(--axis);stroke-width:1}
+svg .xhair{stroke:var(--axis);stroke-width:1}
+.empty{padding:40px 10px;text-align:center;color:var(--muted);font-size:13px}
+#map svg{display:block;max-height:560px}
+.pl{fill:var(--land);stroke:var(--axis);stroke-width:1.2;stroke-linejoin:round}
+.owlbl{fill:var(--muted);opacity:.55;font-weight:600;pointer-events:none}
+.owlbl.on{opacity:.9;fill:var(--ink2)}
+.bub{fill:var(--s1);fill-opacity:.72;stroke:var(--surface);cursor:pointer}
+.bub:hover{fill-opacity:1}
+.bub.sel{fill:var(--sel);fill-opacity:.9}
+.bub.dim{fill-opacity:.18}
+.bub.ow{stroke-width:2}
+.bublbl{fill:#fff;font-size:11px;font-weight:600;pointer-events:none}
+.seg{display:inline-flex;border:1px solid var(--ring);border-radius:8px;overflow:hidden}
+.seg button{border:0;border-radius:0;padding:4px 10px;font-size:12px}
+.seg button.on{background:var(--s1);color:#fff}
+.seg{flex:none}
+.grid2.mt{grid-template-columns:1fr 1.35fr}
+#t-centres td:nth-child(2){min-width:260px}
+#t-centres td:nth-child(3){white-space:nowrap}
+.chead{display:flex;justify-content:space-between;gap:10px;align-items:start}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{font-weight:600;color:var(--ink2);text-align:left;border-bottom:1px solid var(--axis);padding:6px 8px;white-space:nowrap;font-size:12px}
+td{padding:6px 8px;border-bottom:1px solid var(--grid)}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+tbody tr{cursor:pointer}
+tbody tr:hover{background:var(--wash)}
+tr.sel{background:var(--wash);box-shadow:inset 3px 0 0 var(--sel)}
+tfoot td{font-weight:600;border-top:1px solid var(--axis)}
+th.sortable{cursor:pointer}
+th.s1::after{content:" ▲"}th.s-1::after{content:" ▼"}
+.muted{color:var(--muted)}
+.dlt{font-size:11px}.dlt.up{color:var(--up)}.dlt.down{color:var(--down)}
+th.qsel{color:var(--ink);box-shadow:inset 0 -2px 0 var(--s1)}
+table.qt td,table.qt th{padding:5px 7px}
+.flag{font-size:10px;border:1px solid var(--axis);border-radius:4px;padding:0 4px;color:var(--ink2)}
+.scroll{max-height:520px;overflow:auto}
+#tip{position:fixed;z-index:20;background:var(--surface);border:1px solid var(--ring);border-radius:8px;box-shadow:0 6px 24px rgba(0,0,0,.15);padding:8px 10px;font-size:12px;max-width:340px;pointer-events:none}
+.tt-h{font-weight:600;margin-bottom:4px}
+.tt-r{display:grid;grid-template-columns:16px 1fr auto;gap:6px;align-items:center;padding:1px 0}
+.tt-r b{font-variant-numeric:tabular-nums;font-weight:600}
+.tt-t{border-top:1px solid var(--grid);margin-top:3px;padding-top:3px}
+.tt-n{color:var(--muted);margin-top:3px}
+details.card{margin-top:14px}
+details summary{cursor:pointer;font-weight:620;font-size:15px}
+.meth{font-size:13px;color:var(--ink2);max-width:1000px}
+.meth h3{font-size:13px;color:var(--ink);margin:14px 0 4px}
+.meth li{margin:3px 0}
+@media (max-width:900px){.kpi{grid-template-columns:1fr 1fr}.grid2{grid-template-columns:1fr}.tv{font-size:22px}header,main,.frow{padding-left:12px;padding-right:12px}.filters{position:static}}
+</style>
+</head>
+<body>
+<header>
+ <a href="en/" style="float:right;font-size:13px;font-weight:600">English version →</a>
+ <h1>Programy lekowe NFZ — pacjenci i wydatki płatnika</h1>
+ <div class="sub">Liczba pacjentów w czasie (kraj → województwo → miasto → ośrodek) i wartość refundacji leków. Dane NFZ, kalibrowane do realizacji programów (stan: I półrocze 2026).</div>
+</header>
+<div class="filters"><div class="frow">
+ <div class="f wide"><label for="f-prog">Program lekowy</label><select id="f-prog"></select></div>
+ <div class="f wide"><label for="f-sub">Produkt / substancja</label><select id="f-sub"></select></div>
+ <div class="f"><label for="f-ow">Województwo</label><select id="f-ow"></select></div>
+ <div class="f"><label for="f-city">Miasto</label><select id="f-city"></select></div>
+ <div class="f wide"><label for="f-centre">Ośrodek</label><select id="f-centre"></select></div>
+ <div class="f"><label for="f-win">Kwartał</label><select id="f-win"></select></div>
+ <button id="reset" title="Wyczyść filtry geografii i produktu">Wyczyść</button>
+</div></div>
+<main>
+ <div id="scope"></div>
+ <section class="kpi" id="kpi"></section>
+ <div class="grid2">
+  <div class="card"><h2>Pacjenci w kwartale</h2><div class="cs" id="pat-sub"></div><div id="c-pat"></div><div class="legend" id="l-pat"></div></div>
+  <div class="card"><h2>Zmiana liczby pacjentów kwartał do kwartału</h2><div class="cs">Różnica liczby pacjentów na terapii względem poprzedniego kwartału · najedź, aby zobaczyć rozbicie na substancje</div><div id="c-hist"></div><div class="legend" id="l-hist"></div></div>
+ </div>
+ <div class="card" style="margin-bottom:14px"><h2>Pacjenci wg kwartałów</h2><div class="cs">Liczba pacjentów na terapii w kwartale i zmiana kw/kw (pod liczbą) · kliknij nagłówek kwartału, aby wybrać go dla mapy i tabel</div><div class="scroll" id="t-q"></div></div>
+ <div class="grid2">
+  <div class="card"><h2>Wydatki płatnika na leki</h2><div class="cs" id="spend-sub"></div><div id="c-spend"></div><div class="legend" id="l-spend"></div></div>
+  <div class="card"><h2>Struktura produktów</h2><div class="cs">Wybrany kwartał · udziały liczone do sumy pokazanych substancji · kliknij wiersz, aby filtrować po substancji</div><div class="scroll" id="t-prod"></div></div>
+ </div>
+ <div class="grid2 mt">
+  <div class="card"><div class="chead"><div><h2>Mapa ośrodków</h2><div class="cs" id="map-sub"></div></div><div class="seg"><button data-map="centres">Ośrodki</button><button data-map="ow">Województwa</button></div></div><div id="map"></div></div>
+  <div class="card"><h2>Ośrodki</h2><div class="cs" id="tbl-sub"></div><div class="scroll" id="t-centres"></div><div class="cs">* Surowe = liczba z zestawienia NFZ dla okna 4 kwartałów kończącego się w wybranym kwartale, przed kalibracją („&lt;5” = 1,5; maksimum po kodach EAN).</div></div>
+ </div>
+ <details class="card" open>
+  <summary>Metodologia i jakość danych</summary>
+  <div class="meth">
+   <p id="qa-prog"></p>
+   <h3>Kontrola kwartałów względem realizacji NFZ (wybrany program, pokazane substancje)</h3>
+   <div id="qa-q"></div>
+   <h3>Źródła (NFZ)</h3>
+   <ul>
+    <li><b>Realizacja programów lekowych</b> (pliki B.6, B.44, B.59, B.75, B.88, B.101, B.125, B.128, B.129, B.156, B.157, B.159, B.162, B.163.FM, B.169, B.170): liczba osób i rozliczone jednostki dla każdej substancji, wg województwa (OW NFZ), półrocza i lata 2016–I półr. 2026; kwota refundacji wg kodów EAN.</li>
+    <li><b>Liczba pacjentów wg ICD-10 i EAN w ośrodkach</b>: 7 kroczących okien 4-kwartalnych (2024 … III kw. 2025–II kw. 2026), wartości 1–4 utajnione jako „&lt;5”.</li>
+    <li><b>Raport „Programy lekowe” NFZ</b> (11.2026 i 11.2025): przypisanie EAN→program, kody ICD-10 programów, umowy ośrodków (wartości miesięczne 2025 i 2026).</li>
+   </ul>
+   <h3>Łączenie i kalibracja</h3>
+   <ul>
+    <li>Kody EAN ujednolicono (część plików ma 14-cyfrowy GTIN z wiodącym zerem). Każdy wiersz ośrodek×ICD×EAN przypisano do programu: przypisanie wg zgodności ICD-10 z programami, w których refundowany jest dany EAN (np. pembrolizumab z C50 → program raka piersi, poza zakresem dashboardu); kody zabiegowe Z51.x (sesja chemio-/immunoterapii) i przerzuty C77–C79 nie wskazują choroby, na którą podano lek — dzielone są w proporcji do pewnych rozpoznań danego ośrodka dla tego EAN (programy w zakresie, programy spoza dashboardu i RDTL; gdy ośrodek nie ma pewnych rozpoznań — proporcja krajowa). Pozostałe wiersze, których ICD-10 nie pasuje do żadnego programu danego EAN (inne nowotwory pierwotne, kody nienowotworowe), trafiają do pozycji <b>RDTL</b> — bez kalibracji i bez udziału w wydatkach programów (finansowanie z innego źródła). Dotyczy to wszystkich leków, także refundowanych w jednym programie. Cemiplimab z ICD C44 dzielono między B.88 i B.125 wg realizacji w województwie i posiadanej umowy.</li>
+    <li>Pacjent ośrodka dla substancji = maksimum po kodach EAN (pacjent może dostać kilka opakowań/dawek), „&lt;5” = 1,5. Ten wariant najlepiej odtwarza realizację na poziomie województw (najmniejszy rozrzut).</li>
+    <li>Cel kalibracji dla substancji × województwo: okno 2024 i 2025 = liczba osób w roku z realizacji; okna kończące się w II kw. = I półrocze × relacja rok/I półrocze z poprzedniego roku (dla substancji we wprowadzeniu – mediana programu); okna pośrednie = interpolacja współczynnika kalibracji. Sumy województw normalizowane do wartości krajowej, a ośrodki skalowane proporcjonalnie w obrębie województwa — suma ośrodków = realizacja NFZ.</li>
+    <li>Jeśli w województwie realizacja wykazuje pacjentów, a zestawienie ośrodków nie ma rekordów, pacjentów przypisano ośrodkom z umową na program proporcjonalnie do wartości umowy (oznaczenie „umowa”).</li>
+    <li>„Pacjenci” przy wszystkich substancjach = suma po substancjach (konwencja raportu NFZ); pacjent leczony skojarzeniem liczony jest przy każdej substancji. Linia „unikalni” (szac.) oparta jest na rozliczonej diagnostyce w programie.</li>
+   </ul>
+   <h3>Pacjenci w kwartale</h3>
+   <ul>
+    <li><b>Kalibracja kwartałów do realizacji NFZ.</b> Dla każdej substancji i województwa wyznaczono 10 kwartałów (I kw. 2024–II kw. 2026) jednocześnie z: (a) liczby osób z realizacji programu za rok 2024 i 2025 oraz za I półrocze 2024, 2025 i 2026 (wagi wysokie), (b) skalibrowanych okien 4-kwartalnych (różnice między kolejnymi oknami niosą informację o zmianie kw/kw; wagi niższe). Model: okno 4 kw. = <i>f</i> × średnia kwartalna, półrocze = (1+<i>r</i>) × średnia kwartalna, <i>f</i> = 1+3<i>r</i>; <i>r</i> (rotacja kwartalna) z relacji rok / I półrocze w realizacji NFZ. Rozwiązanie: nieujemne najmniejsze kwadraty z wygładzeniem. Województwa normalizowane do kraju. Tabela kontrolna powyżej porównuje wynik z realizacją NFZ.</li>
+    <li><b>Wartości „&lt;5”.</b> W zestawieniach ośrodków 74–82% wierszy (21–38% pacjentów) to „&lt;5” — często pojedynczy pacjent, który może mieć kilka wierszy (różne kody ICD-10). Test na poziomie województw: przyjęcie 1,5 dla „&lt;5” daje medianę zgodności z realizacją 1,00 (także w małych województwach &lt;20 pacjentów); 1,0 zaniża (0,78), 2,0–2,5 zawyża (1,23–1,43).</li>
+    <li><b>Dlaczego kwartały ośrodka nie pochodzą z różnic jego okien.</b> 38% serii ośrodek×substancja ma „&lt;5” we wszystkich oknach (różnica = 0 niezależnie od rzeczywistości), a w 23% wartość przeskakuje między „&lt;5” a ≥5 — taka różnica okien to artefakt progu utajnienia, nie zmiana liczby pacjentów. Dlatego zmiany kw/kw liczone są na poziomie województwa (dane skalibrowane do realizacji), a ośrodek otrzymuje udział w kwartale województwa równy jego udziałowi w oknach obejmujących ten kwartał.</li>
+    <li>Kwartały I–III 2024 są brzegowe, a w latach wprowadzenia leku (np. B.159 w 2024, B.162 w 2024) model rotacji jest mniej trafny — patrz tabela kontrolna.</li>
+    <li>W programie B.6 pokazano tylko leki PD-1/PD-L1 (pembrolizumab, niwolumab, atezolizumab, durwalumab, cemiplimab, tislelizumab, serplulimab); udziały liczone są do ich sumy. RDTL: kwartały z surowych okien, bez kalibracji.</li>
+   </ul>
+   <h3>Programy B.44, B.156, B.169, B.75</h3>
+   <ul>
+    <li>Kalibrowane tak samo jak pozostałe programy — na podstawie plików realizacji NFZ (B.44, B.156, B.169, B.75). Dla HES kod D72.1 z zestawień ośrodków zaliczono do D72.11 (B.169).</li>
+    <li>Rytuksymab jest też w katalogu chemioterapii: wiersze z rozpoznaniem onkologicznym (np. chłoniaki C82–C85) traktowane są jako chemioterapia (inne finansowanie) — nie trafiają do RDTL ani do programów.</li>
+    <li>B.156 i B.169 są w fazie wzrostu (start 2024/2025) — model rotacji jest tu mniej trafny (patrz tabela kontrolna).</li>
+    <li>Wydatki rytuksymabu w B.75 (×1,17) i dupilumabu w B.156 (×1,035) skorygowano do arkusza „koszty” NFZ za I półrocze 2026 (różnice w przeliczeniu jednostek opakowań).</li>
+   </ul>
+   <h3>Programy B.101 i B.157</h3>
+   <ul>
+    <li>Kalibrowane na podstawie plików realizacji NFZ, tak jak pozostałe programy. Kod E78.0 w danych ośrodków zaliczono do E78.01 (B.101); kody E78 bez podkategorii, E78.2 i E78.9 przy lekach z B.101 nie pasują do programu i trafiają do RDTL.</li>
+    <li>B.157 działa od II półrocza 2024 — pacjenci z miastenią leczeni wcześniej (np. rytuksymabem) nie są wliczani do programu. Wydatki rytuksymabu w B.157 (×1,17) skorygowano do arkusza „koszty” NFZ za I półrocze 2026.</li>
+   </ul>
+   <h3>Programy B.59, B.128, B.129, B.170</h3>
+   <ul>
+    <li>B.59 (czerniak skóry i błon śluzowych): wszystkie substancje, w tym niwolumab + relatlimab (Opdualag) jako osobna pozycja. Leki wspólne z innymi programami (niwolumab, ipilimumab, pembrolizumab, enkorafenib, binimetynib) przypisano do B.59 wg kodu C43. Zgodność kwartałów z realizacją: ±0,2%.</li>
+    <li>B.128 (ostra porfiria wątrobowa, giwosiran, ~26 pacjentów) i B.129 (hiperoksaluria typu 1, lumasiran, 8 pacjentów): bardzo małe programy — w danych ośrodków niemal wyłącznie wartości „&lt;5”, więc rozkład na ośrodki jest orientacyjny; sumy krajowe zgodne z realizacją (±4%).</li>
+    <li>B.170 (polineuropatia w hATTR, wutrisiran; start 2025, 13 pacjentów w I półr. 2026): ten sam EAN co w B.162 — rozpoznanie E85.1 dzielone między B.162 i B.170 wg realizacji NFZ w województwie; rozkład na ośrodki orientacyjny.</li>
+   </ul>
+   <h3>Substancje TLI (B.163.FM)</h3>
+   <ul>
+    <li>Tebentafusp (Kimmtrak) jest w pliku realizacji opisany jako „substancje_TLI” (technologia lekowa o wysokim poziomie innowacyjności, finansowanie z Funduszu Medycznego) — uwzględniono go tak samo jak pozostałe substancje (pacjenci, jednostki, refundacja) i oznaczono etykietą TLI.</li>
+    <li>W I półroczu 2025 program rozliczył 397 z 697 refundowanych fiolek (pozostałe poza programem, przed jego pełnym uruchomieniem), dlatego wydatki programu są wtedy niższe niż całkowita refundacja Kimmtrak; od I półrocza 2026 obie wartości są równe (916 fiolek).</li>
+   </ul>
+   <h3>Wydatki</h3>
+   <ul>
+    <li>Kwota refundacji dla substancji (suma po EAN, wszystkie programy) × udział jednostek rozliczonych w danym programie i województwie — wynik zgadza się z arkuszem „koszty” NFZ dla I półr. 2026. II półrocze = rok − I półrocze. Dla miasta/ośrodka: wydatki województwa × udział ośrodka w pacjentach danej substancji (szacunek).</li>
+    <li>Miesięczne komunikaty DGL (wartość refundacji wg EAN) nie są dzielone na programy i nie mogły zostać pobrane w tym środowisku — w dashboardzie użyto półrocznej, programowej kwoty z realizacji.</li>
+   </ul>
+   <h3>Ograniczenia</h3>
+   <ul>
+    <li>Lokalizacja ośrodków na poziomie miasta (współrzędne miast, przybliżony kontur Polski), kilka ośrodków w jednym mieście rozsuniętych dla czytelności.</li>
+    <li>Historia 2016–2021 w programie B.6 obejmuje tylko substancje obecnie rozliczane w programie (dawne świadczenia, np. erlotynib, gefitynib, pemetreksed, są w pliku NFZ oznaczone „brak świadczenia w danej uchwale” i pominięte).</li>
+    <li>Liczby w ośrodkach i miastach to szacunki — wartości małe (&lt;10) traktować orientacyjnie.</li>
+   </ul>
+  </div>
+ </details>
+</main>
+<div id="tip" hidden></div>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

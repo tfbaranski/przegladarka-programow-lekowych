@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NFZ drug programmes – patients and spending</title>
+<style>
+:root{color-scheme:light;
+ --page:#f9f9f7;--surface:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--grid:#e1e0d9;--axis:#c3c2b7;--ring:rgba(11,11,11,.10);
+ --s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100;--s5:#e87ba4;--s6:#008300;--s7:#6250d6;--s8:#e34948;--other:#b4b2ab;
+ --up:#006300;--down:#d03b3b;--land:#f0efec;--sel:#eb6834;--wash:rgba(42,120,214,.07)}
+@media (prefers-color-scheme:dark){:root{color-scheme:dark;
+ --page:#0d0d0d;--surface:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--muted:#898781;--grid:#2c2c2a;--axis:#383835;--ring:rgba(255,255,255,.10);
+ --s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--s5:#d55181;--s6:#008300;--s7:#9085e9;--s8:#e66767;--other:#5d5c58;
+ --up:#0ca30c;--down:#e66767;--land:#242422;--sel:#d95926;--wash:rgba(57,135,229,.12)}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--ink);font:14px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+header{padding:20px 24px 8px;max-width:1400px;margin:0 auto}
+h1{font-size:20px;margin:0 0 4px;font-weight:650}
+.sub{color:var(--ink2);font-size:13px}
+.filters{position:sticky;top:0;z-index:5;background:var(--page);border-bottom:1px solid var(--ring)}
+.frow{max-width:1400px;margin:0 auto;padding:10px 24px;display:flex;gap:10px;flex-wrap:wrap;align-items:end}
+.f{display:flex;flex-direction:column;gap:3px;min-width:150px;flex:1}
+.f.wide{flex:2;min-width:240px}
+.f label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+select,button{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--ring);border-radius:8px;padding:7px 9px;max-width:100%}
+button{cursor:pointer}
+button:hover{background:var(--wash)}
+main{max-width:1400px;margin:0 auto;padding:14px 24px 40px}
+#scope{font-size:13px;color:var(--ink2);margin:2px 0 12px}
+.kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+.tile,.card{background:var(--surface);border:1px solid var(--ring);border-radius:12px}
+.tile{padding:12px 14px}
+.tl{font-size:12px;color:var(--ink2)}
+.tv{font-size:28px;font-weight:600;margin:2px 0}
+.ts{font-size:12px;color:var(--muted)}
+.na{color:var(--muted);font-size:20px}
+.delta.up{color:var(--up)}.delta.down{color:var(--down)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.card{padding:14px 16px;min-width:0}
+.card h2{font-size:15px;margin:0;font-weight:620}
+.card .cs{font-size:12px;color:var(--muted);margin:2px 0 8px}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:var(--ink2);margin-top:6px}
+.lg{display:inline-flex;align-items:center;gap:6px}
+.sw{display:inline-block;width:10px;height:10px;border-radius:3px;flex:none}
+.sw.ln{height:0;width:16px;border-top:2px solid;border-radius:0;background:none}
+.sw.ln.dash{border-top-style:dashed}
+svg text.tick{fill:var(--muted);font-size:11px;font-variant-numeric:tabular-nums}
+svg line.grid{stroke:var(--grid);stroke-width:1}
+svg line.axis{stroke:var(--axis);stroke-width:1}
+svg .xhair{stroke:var(--axis);stroke-width:1}
+.empty{padding:40px 10px;text-align:center;color:var(--muted);font-size:13px}
+#map svg{display:block;max-height:560px}
+.pl{fill:var(--land);stroke:var(--axis);stroke-width:1.2;stroke-linejoin:round}
+.owlbl{fill:var(--muted);opacity:.55;font-weight:600;pointer-events:none}
+.owlbl.on{opacity:.9;fill:var(--ink2)}
+.bub{fill:var(--s1);fill-opacity:.72;stroke:var(--surface);cursor:pointer}
+.bub:hover{fill-opacity:1}
+.bub.sel{fill:var(--sel);fill-opacity:.9}
+.bub.dim{fill-opacity:.18}
+.bub.ow{stroke-width:2}
+.bublbl{fill:#fff;font-size:11px;font-weight:600;pointer-events:none}
+.seg{display:inline-flex;border:1px solid var(--ring);border-radius:8px;overflow:hidden}
+.seg button{border:0;border-radius:0;padding:4px 10px;font-size:12px}
+.seg button.on{background:var(--s1);color:#fff}
+.seg{flex:none}
+.grid2.mt{grid-template-columns:1fr 1.35fr}
+#t-centres td:nth-child(2){min-width:260px}
+#t-centres td:nth-child(3){white-space:nowrap}
+.chead{display:flex;justify-content:space-between;gap:10px;align-items:start}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{font-weight:600;color:var(--ink2);text-align:left;border-bottom:1px solid var(--axis);padding:6px 8px;white-space:nowrap;font-size:12px}
+td{padding:6px 8px;border-bottom:1px solid var(--grid)}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+tbody tr{cursor:pointer}
+tbody tr:hover{background:var(--wash)}
+tr.sel{background:var(--wash);box-shadow:inset 3px 0 0 var(--sel)}
+tfoot td{font-weight:600;border-top:1px solid var(--axis)}
+th.sortable{cursor:pointer}
+th.s1::after{content:" ▲"}th.s-1::after{content:" ▼"}
+.muted{color:var(--muted)}
+.dlt{font-size:11px}.dlt.up{color:var(--up)}.dlt.down{color:var(--down)}
+th.qsel{color:var(--ink);box-shadow:inset 0 -2px 0 var(--s1)}
+table.qt td,table.qt th{padding:5px 7px}
+.flag{font-size:10px;border:1px solid var(--axis);border-radius:4px;padding:0 4px;color:var(--ink2)}
+.scroll{max-height:520px;overflow:auto}
+#tip{position:fixed;z-index:20;background:var(--surface);border:1px solid var(--ring);border-radius:8px;box-shadow:0 6px 24px rgba(0,0,0,.15);padding:8px 10px;font-size:12px;max-width:340px;pointer-events:none}
+.tt-h{font-weight:600;margin-bottom:4px}
+.tt-r{display:grid;grid-template-columns:16px 1fr auto;gap:6px;align-items:center;padding:1px 0}
+.tt-r b{font-variant-numeric:tabular-nums;font-weight:600}
+.tt-t{border-top:1px solid var(--grid);margin-top:3px;padding-top:3px}
+.tt-n{color:var(--muted);margin-top:3px}
+details.card{margin-top:14px}
+details summary{cursor:pointer;font-weight:620;font-size:15px}
+.meth{font-size:13px;color:var(--ink2);max-width:1000px}
+.meth h3{font-size:13px;color:var(--ink);margin:14px 0 4px}
+.meth li{margin:3px 0}
+@media (max-width:900px){.kpi{grid-template-columns:1fr 1fr}.grid2{grid-template-columns:1fr}.tv{font-size:22px}header,main,.frow{padding-left:12px;padding-right:12px}.filters{position:static}}
+</style>
+</head>
+<body>
+<header>
+ <a href="../" style="float:right;font-size:13px;font-weight:600">Wersja polska →</a>
+ <h1>NFZ drug programmes — patients and payer spending</h1>
+ <div class="sub">Patients on therapy by quarter (Poland → voivodeship → city → centre) and drug reimbursement value. NFZ (Polish National Health Fund) data, calibrated to programme realisation reports (status: H1 2026).</div>
+</header>
+<div class="filters"><div class="frow">
+ <div class="f wide"><label for="f-prog">Drug programme</label><select id="f-prog"></select></div>
+ <div class="f wide"><label for="f-sub">Product / substance</label><select id="f-sub"></select></div>
+ <div class="f"><label for="f-ow">Voivodeship</label><select id="f-ow"></select></div>
+ <div class="f"><label for="f-city">City</label><select id="f-city"></select></div>
+ <div class="f wide"><label for="f-centre">Centre</label><select id="f-centre"></select></div>
+ <div class="f"><label for="f-win">Quarter</label><select id="f-win"></select></div>
+ <button id="reset" title="Clear geography and product filters">Clear</button>
+</div></div>
+<main>
+ <div id="scope"></div>
+ <section class="kpi" id="kpi"></section>
+ <div class="grid2">
+  <div class="card"><h2>Patients per quarter</h2><div class="cs" id="pat-sub"></div><div id="c-pat"></div><div class="legend" id="l-pat"></div></div>
+  <div class="card"><h2>Quarter-on-quarter change in patients</h2><div class="cs">Difference in patients on therapy vs the previous quarter · hover for the breakdown by substance</div><div id="c-hist"></div><div class="legend" id="l-hist"></div></div>
+ </div>
+ <div class="card" style="margin-bottom:14px"><h2>Patients by quarter</h2><div class="cs">Patients on therapy in each quarter and QoQ change (below the number) · click a quarter header to select it for the map and tables</div><div class="scroll" id="t-q"></div></div>
+ <div class="grid2">
+  <div class="card"><h2>Payer spending on drugs</h2><div class="cs" id="spend-sub"></div><div id="c-spend"></div><div class="legend" id="l-spend"></div></div>
+  <div class="card"><h2>Product mix</h2><div class="cs">Selected quarter · shares relative to the total of the substances shown · click a row to filter by substance</div><div class="scroll" id="t-prod"></div></div>
+ </div>
+ <div class="grid2 mt">
+  <div class="card"><div class="chead"><div><h2>Map of centres</h2><div class="cs" id="map-sub"></div></div><div class="seg"><button data-map="centres">Centres</button><button data-map="ow">Voivodeships</button></div></div><div id="map"></div></div>
+  <div class="card"><h2>Centres</h2><div class="cs" id="tbl-sub"></div><div class="scroll" id="t-centres"></div><div class="cs">* Raw = count from the NFZ report for the 4-quarter window ending in the selected quarter, before calibration (“&lt;5” = 1.5; maximum across EAN codes).</div></div>
+ </div>
+ <details class="card" open>
+  <summary>Methodology and data quality</summary>
+  <div class="meth">
+   <p id="qa-prog"></p>
+   <h3>Quarterly check against NFZ programme data (selected programme, substances shown)</h3>
+   <div id="qa-q"></div>
+   <h3>Sources (NFZ)</h3>
+   <ul>
+    <li><b>Drug programme realisation reports</b> (files B.6, B.44, B.59, B.75, B.88, B.101, B.125, B.128, B.129, B.156, B.157, B.159, B.162, B.163.FM, B.169, B.170): number of patients and units billed for each substance, by voivodeship (NFZ regional branch), half-year and full year 2016–H1 2026; reimbursement amount by EAN code.</li>
+    <li><b>Patients by ICD-10 and EAN at centres</b>: 7 rolling 4-quarter windows (2024 … Q3 2025–Q2 2026); values 1–4 suppressed as “&lt;5”.</li>
+    <li><b>NFZ “Drug programmes” report</b> (11/2026 and 11/2025): EAN→programme mapping, programme ICD-10 codes, centre contracts (monthly values for 2025 and 2026).</li>
+   </ul>
+   <h3>Linking and calibration</h3>
+   <ul>
+    <li>EAN codes were normalised (some files use a 14-digit GTIN with a leading zero). Each centre×ICD×EAN row is assigned to a programme by matching its ICD-10 code with the programmes in which the EAN is reimbursed (e.g. pembrolizumab with C50 → breast cancer programme, outside this dashboard). Procedural codes Z51.x (chemo-/immunotherapy session) and metastasis codes C77–C79 do not identify the disease being treated — they are split in proportion to the centre’s specific diagnoses for that EAN (in-scope programmes, programmes outside this dashboard and RDTL; national proportions if the centre has none). Remaining rows whose ICD-10 code matches no programme of that EAN (other primary tumours, non-oncological codes) go to <b>RDTL</b> — not calibrated and not included in programme spending (funded from a different source). This applies to all drugs, including those reimbursed in only one programme. Cemiplimab with ICD C44 is split between B.88 and B.125 based on voivodeship realisation and contracts held.</li>
+    <li>Centre patients for a substance = maximum across EAN codes (a patient may receive several packs/strengths), “&lt;5” = 1.5. This variant reproduces voivodeship-level realisation best (lowest dispersion).</li>
+    <li>Calibration target per substance × voivodeship: windows 2024 and 2025 = patients in the year from realisation data; windows ending in Q2 = H1 × full-year/H1 ratio of the previous year (for substances in launch phase – programme median); intermediate windows = interpolated calibration factor. Voivodeship totals are normalised to the national figure, and centres are scaled proportionally within the voivodeship — the sum of centres = NFZ realisation.</li>
+    <li>Where realisation shows patients in a voivodeship but the centre report has no records, patients are allocated to centres holding a programme contract in proportion to contract value (flagged “contract”).</li>
+    <li>“Patients” for all substances = sum across substances (NFZ report convention); a patient on a combination is counted under each substance.</li>
+   </ul>
+   <h3>Patients per quarter</h3>
+   <ul>
+    <li><b>Quarters calibrated to NFZ realisation.</b> For each substance and voivodeship, 10 quarters (Q1 2024–Q2 2026) are estimated jointly from: (a) patients in the realisation reports for full years 2024 and 2025 and for H1 2024, 2025 and 2026 (high weights), (b) calibrated 4-quarter windows (differences between consecutive windows carry the QoQ signal; lower weights). Model: 4-quarter window = <i>f</i> × quarterly average, half-year = (1+<i>r</i>) × quarterly average, <i>f</i> = 1+3<i>r</i>; <i>r</i> (quarterly turnover) from the full-year/H1 ratio in NFZ realisation. Solved by non-negative least squares with smoothing. Voivodeships are normalised to the national total. The check table above compares the result with NFZ realisation.</li>
+    <li><b>“&lt;5” values.</b> In the centre reports 74–82% of rows (21–38% of patients) are “&lt;5” — often a single patient who may appear in several rows (different ICD-10 codes). Test at voivodeship level: using 1.5 for “&lt;5” gives a median agreement with realisation of 1.00 (also in small voivodeships with &lt;20 patients); 1.0 underestimates (0.78), 2.0–2.5 overestimates (1.23–1.43).</li>
+    <li><b>Why centre quarters are not derived from the centre’s own window differences.</b> 38% of centre×substance series are “&lt;5” in every window (difference = 0 regardless of reality), and in 23% the value jumps between “&lt;5” and ≥5 — such a window difference is an artefact of the suppression threshold, not a change in patients. QoQ changes are therefore computed at voivodeship level (calibrated to realisation), and each centre receives a share of the voivodeship quarter equal to its share in the windows covering that quarter.</li>
+    <li>Quarters Q1–Q3 2024 are edge quarters, and in a drug’s launch year (e.g. B.159 and B.162 in 2024) the turnover model is less accurate — see the check table.</li>
+    <li>Programme B.6 shows only PD-1/PD-L1 drugs (pembrolizumab, nivolumab, atezolizumab, durvalumab, cemiplimab, tislelizumab, serplulimab); shares are relative to their total. RDTL: quarters from raw windows, not calibrated.</li>
+   </ul>
+   <h3>Programmes B.44, B.156, B.169, B.75</h3>
+   <ul>
+    <li>Calibrated the same way as the other programmes — using NFZ realisation files (B.44, B.156, B.169, B.75). For HES, code D72.1 in centre reports is counted as D72.11 (B.169).</li>
+    <li>Rituximab is also in the chemotherapy catalogue: rows with an oncological diagnosis (e.g. lymphomas C82–C85) are treated as chemotherapy (different funding) — they go neither to RDTL nor to programmes.</li>
+    <li>B.156 and B.169 are in a growth phase (started 2024/2025) — the turnover model is less accurate there (see the check table).</li>
+    <li>Spending on rituximab in B.75 (×1.17) and dupilumab in B.156 (×1.035) was aligned to the NFZ “costs” sheet for H1 2026 (differences in pack unit conversion).</li>
+   </ul>
+   <h3>Programmes B.101 and B.157</h3>
+   <ul>
+    <li>Calibrated with NFZ realisation files, like the other programmes. Code E78.0 in centre reports is counted as E78.01 (B.101); codes E78 without subcategory, E78.2 and E78.9 with B.101 drugs do not match the programme and go to RDTL.</li>
+    <li>B.157 has run since H2 2024 — myasthenia patients treated earlier (e.g. with rituximab) are not counted in the programme. Rituximab spending in B.157 (×1.17) was aligned to the NFZ “costs” sheet for H1 2026.</li>
+   </ul>
+   <h3>Programmes B.59, B.128, B.129, B.170</h3>
+   <ul>
+    <li>B.59 (cutaneous or mucosal melanoma): all substances, with nivolumab + relatlimab (Opdualag) as a separate item. Drugs shared with other programmes (nivolumab, ipilimumab, pembrolizumab, encorafenib, binimetinib) are assigned to B.59 by code C43. Quarterly fit to realisation: ±0.2%.</li>
+    <li>B.128 (acute hepatic porphyria, givosiran, ~26 patients) and B.129 (primary hyperoxaluria type 1, lumasiran, 8 patients): very small programmes — centre data are almost entirely “&lt;5”, so the split by centre is indicative; national totals match realisation (±4%).</li>
+    <li>B.170 (polyneuropathy in hATTR, vutrisiran; started 2025, 13 patients in H1 2026): same EAN as in B.162 — diagnosis E85.1 split between B.162 and B.170 according to NFZ realisation in the voivodeship; split by centre is indicative.</li>
+   </ul>
+   <h3>TLI substances (B.163.FM)</h3>
+   <ul>
+    <li>Tebentafusp (Kimmtrak) is listed in the realisation file as “substancje_TLI” (highly innovative drug technology funded by the Medical Fund) — it is handled like the other substances (patients, units, reimbursement) and marked with a TLI tag.</li>
+    <li>In H1 2025 the programme billed 397 of the 697 reimbursed vials (the rest outside the programme, before its full launch), so programme spending is lower than total Kimmtrak reimbursement then; from H1 2026 both are equal (916 vials).</li>
+   </ul>
+   <h3>Spending</h3>
+   <ul>
+    <li>Reimbursement for the substance (sum across EANs, all programmes) × share of units billed in the given programme and voivodeship — matches the NFZ “costs” sheet for H1 2026. H2 = full year − H1. For a city/centre: voivodeship spending × centre share of patients on the substance (estimate).</li>
+    <li>Monthly NFZ reimbursement announcements by EAN (DGL) are not split by programme and could not be downloaded in this environment — the dashboard uses half-yearly, programme-specific amounts from realisation reports.</li>
+   </ul>
+   <h3>Limitations</h3>
+   <ul>
+    <li>Centres are located at city level (city coordinates, simplified outline of Poland); several centres in one city are spread apart for readability.</li>
+    <li>Centre and city figures are estimates — treat small values (&lt;10) as indicative.</li>
+    <li>Centre names, cities and brand names are kept in their original Polish form.</li>
+   </ul>
+  </div>
+ </details>
+</main>
+<div id="tip" hidden></div>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
