@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Przeglądarka programów lekowych</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4f5f2; --panel:#ffffff; --ink:#1c2321; --muted:#5d6a66; --line:#dfe3df; --soft:#eef1ed;
+  --acc:#0f5c55; --acc2:#e7f1ef; --warn:#8a4b08; --warnbg:#fbf1e3; --mark:#ffe58a;
+  --sans:'IBM Plex Sans',system-ui,sans-serif; --serif:'IBM Plex Serif',Georgia,serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:var(--sans);color:var(--ink);background:var(--bg);font-size:15px;line-height:1.5}
+a{color:var(--acc)}
+button{font:inherit}
+.app{display:grid;grid-template-columns:340px 1fr;height:100vh}
+/* sidebar */
+.side{background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;min-height:0}
+.brand{padding:18px 18px 10px}
+.brand h1{font-size:17px;margin:0;letter-spacing:-.01em}
+.brand .sub{font-size:12px;color:var(--muted);margin-top:2px}
+.nav{display:flex;gap:6px;padding:0 18px 10px}
+.nav a{font-size:12.5px;text-decoration:none;padding:4px 9px;border-radius:999px;background:var(--soft);color:var(--ink)}
+.nav a.on{background:var(--acc);color:#fff}
+.search{padding:0 18px 8px}
+.search input[type=search]{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:8px;font:inherit;background:#fbfcfb}
+.search input:focus{outline:2px solid var(--acc);outline-offset:-1px}
+.opts{display:flex;flex-wrap:wrap;gap:6px;padding:0 18px 10px;font-size:12.5px}
+.chipf{border:1px solid var(--line);background:#fff;border-radius:999px;padding:3px 9px;cursor:pointer;color:var(--muted)}
+.chipf.on{border-color:var(--acc);background:var(--acc2);color:var(--acc);font-weight:500}
+.count{font-size:12px;color:var(--muted);padding:0 18px 6px}
+.list{overflow:auto;flex:1;border-top:1px solid var(--line)}
+.item{display:block;padding:9px 18px;border-bottom:1px solid var(--soft);text-decoration:none;color:var(--ink);cursor:pointer}
+.item:hover{background:#f7f9f7}
+.item.on{background:var(--acc2);box-shadow:inset 3px 0 0 var(--acc)}
+.item .c{font-weight:600;font-size:13px;color:var(--acc)}
+.item .t{font-size:13px;line-height:1.35}
+.item .m{font-size:11.5px;color:var(--muted);margin-top:2px}
+.item .hit{font-size:11.5px;color:var(--muted);margin-top:3px;font-style:italic}
+/* main */
+.main{overflow:auto;min-height:0}
+.wrap{max-width:1180px;margin:0 auto;padding:26px 32px 60px}
+.crumb{font-size:12.5px;color:var(--muted)}
+.ph{display:flex;gap:18px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+.ph h2{font-size:24px;line-height:1.25;margin:4px 0 6px;letter-spacing:-.015em;max-width:820px}
+.codebig{font-weight:700;color:var(--acc)}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:14px 0 6px}
+.facts div{background:var(--panel);padding:9px 12px}
+.facts .k{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.facts .v{font-size:13.5px}
+.flags{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 0}
+.flag{font-size:12px;padding:3px 9px;border-radius:999px;background:var(--soft);color:var(--muted)}
+.flag.y{background:var(--acc2);color:var(--acc);font-weight:500}
+.flag.fm{background:var(--warnbg);color:var(--warn)}
+.tabs{display:flex;flex-wrap:wrap;gap:2px;border-bottom:1px solid var(--line);margin:22px 0 0;position:sticky;top:0;background:var(--bg);z-index:5}
+.tab{border:0;background:none;padding:10px 13px;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap;font-size:14px}
+.tab.on{color:var(--ink);border-bottom-color:var(--acc);font-weight:600}
+.tab .b{font-size:11px;background:var(--soft);border-radius:999px;padding:0 6px;margin-left:4px;color:var(--muted)}
+.tab.special{color:var(--warn)}
+.pane{padding-top:18px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:14px}
+.card h3{margin:0 0 10px;font-size:15.5px}
+.card h4{margin:14px 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.part{font-size:12px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:var(--warn);background:var(--warnbg);display:inline-block;padding:3px 9px;border-radius:6px;margin:6px 0 10px}
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin-bottom:14px}
+.sum{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.sum .k{font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.sum .v{font-size:15px;font-weight:600;margin-top:2px}
+.sum .d{font-size:13px;color:var(--muted);margin-top:4px;white-space:pre-line}
+.yes{color:var(--acc)} .no{color:#8b8f8d}
+/* legal text */
+.lt{font-family:var(--serif);font-size:14.5px;line-height:1.55}
+.lt .p{margin:.28em 0;padding-left:calc(var(--lv) * 1.4em)}
+.lt .p.num{display:grid;grid-template-columns:auto 1fr;column-gap:.5em}
+.lt .p .n{font-family:var(--sans);font-size:13px;color:var(--acc);font-weight:600;min-width:1.6em;padding-top:1px}
+.lt .p.bold .tx{font-weight:600}
+.lt table.inner{border-collapse:collapse;margin:8px 0;font-size:13px;width:100%}
+.lt table.inner td{border:1px solid var(--line);padding:5px 7px;vertical-align:top}
+.tw{overflow-x:auto}
+mark{background:var(--mark);padding:0 1px;border-radius:2px}
+table.full{border-collapse:collapse;width:100%;background:var(--panel);font-size:13.5px}
+table.full td{border:1px solid var(--line);padding:10px 12px;vertical-align:top;width:33%}
+table.full tr:first-child td,table.full tr:nth-child(2) td{background:var(--soft);font-family:var(--sans);font-weight:600;font-size:12px;text-align:center}
+.fullwrap{overflow-x:auto;border-radius:10px;border:1px solid var(--line)}
+table.req{border-collapse:collapse;width:100%;font-size:13.5px}
+table.req td,table.req th{border-bottom:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top}
+table.req th{font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-weight:600}
+table.req .p{margin:0}
+.docs{display:grid;gap:8px}
+.doc{display:flex;gap:12px;align-items:center;padding:11px 13px;border:1px solid var(--line);border-radius:10px;background:var(--panel);text-decoration:none;color:var(--ink)}
+.doc:hover{border-color:var(--acc);background:#fbfdfc}
+.doc .ic{flex:none;width:34px;height:40px;border-radius:5px;background:#c2410c;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:flex-end;justify-content:center;padding-bottom:5px}
+.doc .ic.q{background:var(--acc)}
+.doc .tt{font-size:14px;font-weight:500;line-height:1.3}
+.doc .mm{font-size:12px;color:var(--muted)}
+.note{font-size:13px;color:var(--muted)}
+.empty{color:var(--muted);font-style:italic}
+.home h2{font-size:26px;margin:6px 0}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:18px 0}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.stat .n{font-size:26px;font-weight:700;color:var(--acc)}
+.stat .l{font-size:13px;color:var(--muted)}
+.zlist .card h3{margin-bottom:4px}
+.ptags{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.ptags a{font-size:12px;background:var(--acc2);color:var(--acc);padding:2px 8px;border-radius:999px;text-decoration:none}
+.menu-btn{display:none}
+.tools{display:flex;gap:8px}
+.btn{border:1px solid var(--line);background:var(--panel);padding:6px 11px;border-radius:8px;cursor:pointer;font-size:13px;color:var(--ink)}
+.btn:hover{border-color:var(--acc)}
+@media (max-width:880px){
+  .app{grid-template-columns:1fr;height:auto}
+  .side{position:fixed;inset:0;z-index:30;transform:translateX(-100%);transition:transform .2s}
+  .side.open{transform:none}
+  .menu-btn{display:inline-block;position:sticky;top:0;z-index:20;margin:10px 0 0 14px}
+  .wrap{padding:14px 16px 50px}
+  .ph h2{font-size:20px}
+  .main{overflow:visible}
+  .closeside{display:inline-block!important}
+}
+.closeside{display:none;float:right}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side" id="side">
+    <div class="brand"><button class="btn closeside" onclick="side(false)">✕</button><h1>Programy lekowe</h1><div class="sub" id="metaSub">Wczytywanie…</div></div>
+    <div class="nav"><a href="#start" data-nav="start">Start</a><a href="#zespoly" data-nav="zespoly">Zespoły</a><a href="#dokumenty" data-nav="dokumenty">Dokumenty</a></div>
+    <div class="search"><input type="search" id="q" placeholder="Szukaj: kod, nazwa, ICD-10, substancja…" autocomplete="off"></div>
+    <div class="opts" id="opts">
+      <span class="chipf" data-f="ft" title="Szukaj także w treści programów">Pełny tekst</span>
+      <span class="chipf" data-f="onko">Onkologiczne</span>
+      <span class="chipf" data-f="nieonko">Nieonkologiczne</span>
+      <span class="chipf" data-f="zespol">Zespół koord.</span>
+      <span class="chipf" data-f="fm">Fundusz Medyczny</span>
+      <span class="chipf" data-f="domowe">Warunki domowe</span>
+    </div>
+    <div class="count" id="count"></div>
+    <div class="list" id="list"></div>
+  </aside>
+  <main class="main" id="main">
+    <button class="btn menu-btn" onclick="side(true)">☰ Lista programów</button>
+    <div class="wrap" id="view"></div>
+  </main>
+</div>
+<script>
+const S={idx:null,cur:null,curCode:null,tab:'kwal',filters:new Set(),q:'',cache:{}};
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const slug=c=>c.replace(/[^A-Za-z0-9]/g,'');
+const norm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/ł/g,'l');
+function side(o){$('#side').classList.toggle('open',o)}
+function store(k,v){try{v===undefined?0:localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+function load(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
+
+const CAT={
+  kwal:{label:'Kwalifikacja',cats:['wstep','kwalifikacja']},
+  leczenie:{label:'Leczenie i dawkowanie',cats:['czas','zamiana','dawkowanie']},
+  monit:{label:'Badania i monitorowanie',cats:['badania_kwal','monitorowanie','skutecznosc']},
+  wyl:{label:'Kryteria wyłączenia',cats:['wylaczenie']},
+  inne:{label:'Pozostałe',cats:['inne']},
+};
+
+async function init(){
+  try{
+    S.idx=await (await fetch('data/index.json')).json();
+  }catch(e){$('#view').innerHTML='<p class="empty">Nie udało się wczytać danych.</p>';return}
+  S.byCode={};S.bySlug={};
+  for(const p of S.idx.programs){S.byCode[p.code]=p;S.bySlug[slug(p.code)]=p;p._n=norm([p.code,p.title,p.name,p.icd,p.subst,p.kod].join(' '));p._t=norm(p.txt)}
+  S.zByKey={};for(const z of S.idx.zespoly)S.zByKey[z.key]=z;
+  $('#metaSub').textContent=S.idx.programs.length+' programów · obwieszczenie 10/2026 · zarz. NFZ 110/2026';
+  S.filters=new Set(load('pl_filters',[]));
+  document.querySelectorAll('.chipf').forEach(c=>{c.classList.toggle('on',S.filters.has(c.dataset.f));c.onclick=()=>{const f=c.dataset.f;
+    if(S.filters.has(f))S.filters.delete(f);else{S.filters.add(f);if(f==='onko')S.filters.delete('nieonko');if(f==='nieonko')S.filters.delete('onko')}
+    document.querySelectorAll('.chipf').forEach(x=>x.classList.toggle('on',S.filters.has(x.dataset.f)));store('pl_filters',[...S.filters]);renderList()}});
+  let t;$('#q').oninput=e=>{clearTimeout(t);t=setTimeout(()=>{S.q=e.target.value.trim();renderList();if(S.cur)renderProgram()},140)};
+  window.onhashchange=route;renderList();route();
+}
+
+function terms(){return norm(S.q).split(/\s+/).filter(x=>x.length>1)}
+function matches(p){
+  const f=S.filters;
+  if(f.has('onko')&&p.cat!=='onkologiczne')return false;
+  if(f.has('nieonko')&&p.cat!=='nieonkologiczne')return false;
+  if(f.has('zespol')&&!p.flags.zespol)return false;
+  if(f.has('fm')&&!p.flags.fm)return false;
+  if(f.has('domowe')&&!p.flags.domowe)return false;
+  const ts=terms();if(!ts.length)return true;
+  return ts.every(t=>p._n.includes(t)||(f.has('ft')&&p._t.includes(t)));
+}
+function snippet(p){
+  const ts=terms();if(!ts.length||!S.filters.has('ft'))return'';
+  if(ts.every(t=>p._n.includes(t)))return'';
+  const t=ts.find(t=>p._t.includes(t));const i=p._t.indexOf(t);
+  return'…'+esc(p.txt.slice(Math.max(0,i-50),i+70))+'…';
+}
+function renderList(){
+  const arr=S.idx.programs.filter(matches);
+  $('#count').textContent=arr.length===S.idx.programs.length?`Wszystkie programy (${arr.length})`:`Znaleziono: ${arr.length} z ${S.idx.programs.length}`;
+  $('#list').innerHTML=arr.map(p=>{const sn=snippet(p);return`<a class="item ${S.curCode===p.code?'on':''}" href="#${slug(p.code)}">
+    <div class="c">${esc(p.code)}${p.flags.fm?' <span class="flag fm" style="padding:0 6px;font-size:10.5px">FM</span>':''}</div>
+    <div class="t">${esc(p.name||p.title)}</div><div class="m">${esc(p.icd)}</div>${sn?`<div class="hit">${sn}</div>`:''}</a>`}).join('')||'<p class="empty" style="padding:18px">Brak wyników.</p>';
+}
+
+function route(){
+  const h=decodeURIComponent(location.hash.slice(1));
+  document.querySelectorAll('[data-nav]').forEach(a=>a.classList.toggle('on',a.dataset.nav===h||(!h&&a.dataset.nav==='start')));
+  side(false);
+  if(h==='b162-formularz'){S.tab='form';openProgram('B.162')}
+  else if(S.bySlug[h]){openProgram(S.bySlug[h].code)}
+  else{S.cur=null;S.curCode=null;renderList();
+    if(h==='zespoly')renderZespoly();else if(h==='dokumenty')renderDocs();else renderHome();}
+  $('#main').scrollTop=0;window.scrollTo(0,0);
+}
+
+async function openProgram(code){
+  S.curCode=code;renderList();
+  const it=document.querySelector('.item.on');if(it)it.scrollIntoView({block:'nearest'});
+  $('#view').innerHTML='<p class="note">Wczytywanie programu…</p>';
+  if(!S.cache[code]){try{S.cache[code]=await (await fetch('data/p/'+encodeURIComponent(code)+'.json')).json()}catch(e){$('#view').innerHTML='<p class="empty">Błąd wczytywania.</p>';return}}
+  if(S.curCode!==code)return;
+  S.cur=S.cache[code];
+  const tabs=availTabs();if(!tabs.find(t=>t[0]===S.tab))S.tab='kwal';
+  renderProgram();
+}
+
+function hl(html){
+  const ts=terms();if(!ts.length)return html;
+  const tmp=document.createElement('div');tmp.innerHTML=html;
+  const w=document.createTreeWalker(tmp,NodeFilter.SHOW_TEXT);const nodes=[];while(w.nextNode())nodes.push(w.currentNode);
+  for(const n of nodes){const nt=norm(n.nodeValue);let hits=[];
+    for(const t of ts){let i=nt.indexOf(t);while(i>-1){hits.push([i,i+t.length]);i=nt.indexOf(t,i+t.length)}}
+    if(!hits.length)continue;hits.sort((a,b)=>a[0]-b[0]);
+    const f=document.createDocumentFragment();let last=0;
+    for(const[a,b]of hits){if(a<last)continue;f.append(n.nodeValue.slice(last,a));const m=document.createElement('mark');m.textContent=n.nodeValue.slice(a,b);f.append(m);last=b}
+    f.append(n.nodeValue.slice(last));n.replaceWith(f)}
+  return tmp.innerHTML;
+}
+
+function secsFor(key){return S.cur.sections.filter(s=>CAT[key].cats.includes(s.cat))}
+function availTabs(){
+  const p=S.cur;const t=[];
+  for(const k of Object.keys(CAT)){const n=secsFor(k).length;if(n||k==='kwal')t.push([k,CAT[k].label,n])}
+  t.push(['wym','Wymagania NFZ',0]);
+  t.push(['docs','Dokumenty',0]);
+  t.push(['full','Pełny tekst',0]);
+  if(p.code==='B.162')t.push(['form','Formularz kwalifikacji',0]);
+  return t;
+}
+
+function renderSecs(secs){
+  if(!secs.length)return'<p class="empty">Brak treści w tej sekcji dla tego programu – zobacz „Pełny tekst”.</p>';
+  const parts=[...new Set(S.cur.sections.map(s=>s.part).filter(Boolean))];
+  let out='',lastPart=null,open=false;
+  for(const s of secs){
+    if(parts.length>1&&s.part&&s.part!==lastPart){if(open){out+='</div>';open=false}out+=`<div class="part">${esc(s.part)}</div>`;lastPart=s.part}
+    if(!s.title&&!s.html)continue;
+    const isSub=/^\d+\.\d+/.test(s.title);
+    if(!isSub||!open){if(open)out+='</div>';out+='<div class="card lt">';open=true}
+    if(s.title)out+=isSub?`<h4 style="text-transform:none;letter-spacing:0;font-size:14.5px;color:var(--ink);font-family:var(--sans)">${esc(s.title)}</h4>`:`<h3 style="font-family:var(--sans)">${esc(s.title)}</h3>`;
+    else if(s.col===1)out+=`<h3 style="font-family:var(--sans)">Schemat dawkowania</h3>`;
+    else if(s.cat==='wstep')out+=`<h3 style="font-family:var(--sans)">Informacje ogólne</h3>`;
+    out+=hl(s.html);
+  }
+  if(open)out+='</div>';return out;
+}
+
+function zespolSummary(){
+  const p=S.cur;const zs=p.zespoly.map(k=>S.zByKey[k]).filter(Boolean);
+  const jk=zs.map(z=>(z.info||[]).find(i=>/jednostka koordynuj/i.test(i.k))).filter(Boolean);
+  return `<div class="summary">
+   <div class="sum"><div class="k">Zespół koordynacyjny</div><div class="v ${p.flags.zespol?'yes':'no'}">${p.flags.zespol?'TAK':'NIE'}</div>
+     <div class="d">${zs.length?zs.map(z=>esc(z.name)).join('<br>'):(p.flags.zespol?'wzmianka w opisie programu':'kwalifikacja w ośrodku realizującym program')}</div></div>
+   <div class="sum"><div class="k">Ośrodek / jednostka koordynująca</div><div class="v ${jk.length||p.flags.osrodek?'yes':'no'}">${jk.length||p.flags.osrodek?'TAK':'NIE'}</div>
+     <div class="d">${jk.length?jk.map(i=>esc(i.v)).join('\n'):(p.flags.osrodek?'wskazany w opisie programu':'nie wskazano')}</div></div>
+   <div class="sum"><div class="k">Kto kwalifikuje</div><div class="d" style="color:var(--ink);font-size:13.5px">${p.kwalBy?hl(esc(p.kwalBy)):'Lekarz w ośrodku realizującym program (brak odrębnego zapisu)'}</div></div>
+  </div>`;
+}
+
+function renderWym(){
+  const p=S.cur;let out='';
+  if(p.wym){
+    out+=`<div class="card"><h3>Wymagania wobec świadczeniodawców – ${esc(p.wym.kod)}</h3><p class="note" style="margin-top:-4px">Załącznik nr 3 do zarządzenia 75/2026/DGL w brzmieniu zał. nr 6 do zarządzenia 110/2026/DGL.</p>`;
+    for(const g of p.wym.groups){
+      out+=`<h4>${esc(g.cat||'—')}</h4><table class="req lt" style="font-family:var(--sans)">`;
+      for(const r of g.rows){
+        const cells=r.length===1?[r[0],'']:r;
+        const isHead=g.cat.startsWith('organizacja')&&/kod resortowy/.test(cells[0]);
+        out+='<tr>'+cells.map((c,i)=>isHead?`<th>${c.replace(/<[^>]+>/g,'')}</th>`:`<td ${cells.length===2&&i===0?'style="width:45%"':''}>${c}</td>`).join('')+'</tr>';
+      }
+      out+='</table>';
+    }
+    out+='</div>';
+  } else out+='<div class="card"><p class="empty">Brak tabeli wymagań dla tego programu w zał. 3 do zarządzenia (stan wg zarządzenia 110/2026/DGL).</p></div>';
+  if(p.rycz&&p.rycz.length){
+    out+=`<div class="card"><h3>Ryczałty za diagnostykę</h3><table class="req"><tr><th>Kod świadczenia</th><th>Nazwa</th><th style="text-align:right">Ryczałt roczny (pkt)</th></tr>`+
+      p.rycz.map(r=>`<tr><td>${esc(r.kod)}</td><td>${esc(r.nazwa)}${r.uwagi?`<div class="note">${esc(r.uwagi)}</div>`:''}</td><td style="text-align:right;white-space:nowrap">${esc(r.pkt)}</td></tr>`).join('')+'</table><p class="note">Zał. 1l do zarządzenia (brzmienie wg zał. nr 2 do zarządzenia 110/2026/DGL).</p></div>';
+  }
+  out+=`<div class="card"><h3>Zasady realizacji programów lekowych</h3><p class="note">Ogólne warunki zawierania i realizacji umów, rozliczania oraz sprawozdawczości określa treść zarządzenia Prezesa NFZ.</p><div class="docs">${S.idx.commonDocs.filter(d=>/Treść|Wymagania/.test(d.kind)).map(docLink).join('')}</div></div>`;
+  return out;
+}
+function docLink(d,q){return`<a class="doc" href="${esc(d.path)}" target="_blank" rel="noopener"><span class="ic ${q?'q':''}">PDF</span><span><div class="tt">${esc(d.title)}</div><div class="mm">${esc(d.kind)} · ${esc(d.src)} · ${d.pages} str.</div></span></a>`}
+
+function renderDocsTab(){
+  const p=S.cur;const zs=p.zespoly.map(k=>S.zByKey[k]).filter(Boolean);let out='';
+  if(zs.length){
+    out+=`<div class="card"><h3>Dokumenty do kwalifikacji pacjenta</h3><p class="note" style="margin-top:-4px">Wzory wniosków (kwalifikacja, zmiana terapii, weryfikacja skuteczności) oraz zasady działania zespołu są zawarte w załączniku „Zakres działania zespołu koordynacyjnego”.</p><div class="docs">`+
+      zs.map(z=>z.docs.filter(d=>d.kind.startsWith('Zakres')).map(d=>docLink({...d,title:d.title},true)).join('')).join('')+`</div></div>`;
+    out+=zs.map(z=>`<div class="card"><h3>${esc(z.name)}</h3><div class="docs">${z.docs.filter(d=>!d.kind.startsWith('Zakres')).map(d=>docLink(d)).join('')}</div>${zInfo(z)}</div>`).join('');
+  } else out+='<div class="card"><h3>Dokumenty do kwalifikacji pacjenta</h3><p class="note">Program nie ma zespołu koordynacyjnego – kwalifikacja odbywa się w ośrodku realizującym program. Dokumentację prowadzi się zgodnie z opisem programu i ogólnymi zasadami (karta włączenia do programu – poniżej).</p></div>';
+  out+=`<div class="card"><h3>Dokumenty wspólne dla wszystkich programów</h3><div class="docs">${S.idx.commonDocs.map(d=>docLink(d)).join('')}</div></div>`;
+  return out;
+}
+function zInfo(z){
+  if(!z.info||!z.info.length)return'';
+  return `<details style="margin-top:10px"><summary class="note" style="cursor:pointer">Charakterystyka świadczenia zespołu</summary><table class="req" style="margin-top:6px">${z.info.map(i=>`<tr><td style="width:38%;color:var(--muted)">${esc(i.k)}</td><td style="white-space:pre-line">${esc(i.v)}</td></tr>`).join('')}</table></details>`;
+}
+
+const OFFLINE=[
+  {path:'docs/offline/B162_formularze_kwalifikacyjne.xlsx',name:'B162_formularze_kwalifikacyjne.xlsx',x:1,title:'Excel – wszystkie trzy formularze',desc:'Listy wyboru, kontrola PESEL/NPWZ, status kompletności, decyzja pobiera dane z wniosku, gotowy obszar wydruku A4 → PDF'},
+  {path:'docs/offline/B162_wniosek_o_kwalifikacje_formularz.pdf',name:'B162_wniosek_o_kwalifikacje_formularz.pdf',title:'Aktywny PDF – wniosek o kwalifikację',desc:'4 strony, w tym zgoda pacjenta (zał. 2.1)'},
+  {path:'docs/offline/B162_wniosek_o_zmiane_leczenia_formularz.pdf',name:'B162_wniosek_o_zmiane_leczenia_formularz.pdf',title:'Aktywny PDF – wniosek o zmianę leczenia',desc:'2 strony'},
+  {path:'docs/offline/B162_decyzja_zespolu_formularz.pdf',name:'B162_decyzja_zespolu_formularz.pdf',title:'Aktywny PDF – decyzja zespołu',desc:'1 strona, z klauzulą informacyjną NFZ'},
+];
+let dlNs=null;
+try{ if(window.claude&&window.claude.use) window.claude.use('downloads').then(x=>dlNs=x).catch(()=>{}); }catch(e){}
+document.addEventListener('click',async e=>{
+  const a=e.target.closest('[data-dl]'); if(!a) return;
+  const isB64=a.dataset.dl.endsWith('.xlsx.json');
+  if(!dlNs) return; // poza claude.ai – zwykłe pobieranie przez link
+  e.preventDefault();
+  try{
+    let blob;
+    if(isB64){ const j=await (await fetch(a.dataset.dl)).json(); const bin=atob(j.base64); const u=new Uint8Array(bin.length); for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i); blob=new Blob([u]); }
+    else blob=await (await fetch(a.dataset.dl)).blob();
+    await dlNs.save({filename:a.dataset.name,data:blob});
+  }
+  catch(err){ if(!isB64&&(!err||err.code!=='declined')) window.open(a.href,'_blank'); }
+});
+let formLib=null;
+function loadFormModule(){
+  if(window.B162Form)return Promise.resolve();
+  if(formLib)return formLib;
+  formLib=new Promise((res,rej)=>{const s=document.createElement('script');s.src='modules/b162-form.js';s.onload=res;s.onerror=rej;document.head.appendChild(s)});
+  return formLib;
+}
+function renderForm(){
+  setTimeout(()=>{const el=document.getElementById('b162form');if(!el)return;
+    loadFormModule().then(()=>window.B162Form.mount(el)).catch(()=>{el.innerHTML='<p class="empty">Nie udało się wczytać modułu formularza.</p>'})},0);
+  return `<div id="b162form"><p class="note">Wczytywanie modułu formularza…</p></div>
+  <div class="card" style="margin-top:14px"><h3 style="font-size:14px">Wersje offline formularzy</h3>
+  <p class="note" style="margin-top:-4px">Do wypełniania bez dostępu do internetu. Aktywne PDF działają w pełni w Adobe Acrobat Reader (lista ośrodków, kontrola PESEL/NPWZ, przycisk „Sprawdź kompletność”, zapis wypełnionego pliku). W innych przeglądarkach PDF pola można wypełnić, ale bez kontroli poprawności.</p>
+  <div class="docs">${OFFLINE.map(o=>`<a class="doc" href="${o.path}" download="${o.name}" data-dl="${o.path}" data-name="${o.name}"><span class="ic ${o.x?'q':''}" style="${o.x?'background:#1d6f42':''}">${o.x?'XLSX':'PDF'}</span><span><div class="tt">${esc(o.title)}</div><div class="mm">${esc(o.desc)}</div></span></a>`).join('')}</div></div>
+  <div class="card" style="margin-top:14px"><h3 style="font-size:14px">Źródło wzorów</h3><div class="docs">${(S.zByKey.kardio?.docs||[]).filter(d=>d.kind.startsWith('Zakres')).map(d=>docLink(d,true)).join('')}</div>
+  <p class="note" style="margin-bottom:0">Załącznik zawiera wzory wyłącznie dla kardiomiopatii w przebiegu amyloidozy transtyretynowej (E85). Dla kardiomiopatii przerostowej (I42.1, mawakamten) załącznik nie zawiera wzoru dokumentu – pozostaje wniosek w elektronicznym systemie monitorowania programów lekowych (pkt 1.8 zakresu działania zespołu).</p></div>`;
+}
+
+function renderProgram(){
+  const p=S.cur;if(!p)return;
+  const tabs=availTabs();
+  const sinceTxt=p.since?p.since.split('-').reverse().join('.'):'';
+  let body='';
+  if(S.tab==='kwal')body=zespolSummary()+renderSecs(secsFor('kwal'));
+  else if(CAT[S.tab])body=renderSecs(secsFor(S.tab));
+  else if(S.tab==='wym')body=renderWym();
+  else if(S.tab==='docs')body=renderDocsTab();
+  else if(S.tab==='full')body=`<div class="fullwrap lt">${hl(p.fullHtml)}</div>`;
+  else if(S.tab==='form')body=renderForm();
+  $('#view').innerHTML=`
+   <div class="crumb">Załącznik ${esc(p.code)} do obwieszczenia MZ${sinceTxt?' · brzmienie od '+esc(sinceTxt):''}</div>
+   <div class="ph"><h2><span class="codebig">${esc(p.code)}</span> ${esc(p.name||p.title)}</h2></div>
+   <div class="note" style="font-size:12.5px">${esc(p.title)}</div>
+   <div class="facts">
+     <div><div class="k">Kod zakresu NFZ</div><div class="v">${esc(p.kod||'—')}</div></div>
+     <div><div class="k">ICD-10</div><div class="v">${esc(p.icd||'—')}</div></div>
+     <div style="grid-column:span 2"><div class="k">Substancje czynne</div><div class="v">${esc((p.subst||'—').toLowerCase())}</div></div>
+     <div><div class="k">Grupa</div><div class="v">${esc(p.cat||'—')}</div></div>
+   </div>
+   <div class="flags">
+     <span class="flag ${p.flags.zespol?'y':''}">${p.flags.zespol?'✓':'✗'} Zespół koordynacyjny</span>
+     <span class="flag ${p.flags.osrodek||p.zespoly.length?'y':''}">${p.flags.osrodek||p.zespoly.length?'✓':'✗'} Ośrodek koordynujący</span>
+     <span class="flag ${p.flags.domowe?'y':''}">${p.flags.domowe?'✓':'✗'} Leczenie w warunkach domowych</span>
+     ${p.flags.fm?'<span class="flag fm">Fundusz Medyczny</span>':''}
+   </div>
+   <nav class="tabs">${tabs.map(([k,l,n])=>`<button class="tab ${S.tab===k?'on':''} ${k==='form'?'special':''}" data-tab="${k}">${esc(l)}${n?`<span class="b">${n}</span>`:''}</button>`).join('')}</nav>
+   <div class="pane">${body}</div>`;
+  document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{S.tab=b.dataset.tab;renderProgram()});
+}
+
+function renderHome(){
+  const P=S.idx.programs;
+  const n=f=>P.filter(f).length;
+  $('#view').innerHTML=`<div class="home">
+   <div class="crumb">${esc(S.idx.meta.obwieszczenie)}</div>
+   <h2>Przeglądarka programów lekowych</h2>
+   <p class="note" style="max-width:760px">Treść programów (obwieszczenie Ministra Zdrowia) podzielona na sekcje: kwalifikacja, leczenie i dawkowanie, badania i monitorowanie, kryteria wyłączenia. Do tego wymagania wobec świadczeniodawców, ryczałty diagnostyczne i dokumenty zespołów koordynacyjnych z zarządzenia Prezesa NFZ.<br>${esc(S.idx.meta.zarzadzenie)}</p>
+   <div class="grid3">
+     <div class="stat"><div class="n">${P.length}</div><div class="l">programów lekowych</div></div>
+     <div class="stat"><div class="n">${n(p=>p.cat==='onkologiczne')}</div><div class="l">onkologicznych</div></div>
+     <div class="stat"><div class="n">${n(p=>p.flags.zespol)}</div><div class="l">z zespołem koordynacyjnym</div></div>
+     <div class="stat"><div class="n">${S.idx.zespoly.length}</div><div class="l">zespołów koordynacyjnych</div></div>
+   </div>
+   <div class="card"><h3>Program pilotażowy – formularze online B.162</h3><p>Dla programu <a href="#B162"><b>B.162 – Leczenie pacjentów z kardiomiopatią</b></a> dostępne są formularze online: wniosek o kwalifikację, wniosek o zmianę leczenia i decyzja zespołu koordynacyjnego – z zapisem danych i generowaniem PDF.</p><p><a href="#b162-formularz" class="btn" style="text-decoration:none;display:inline-block">Otwórz formularze B.162 →</a></p></div>
+   <div class="card"><h3>Jak korzystać</h3><p class="note">Wybierz program z listy po lewej albo wyszukaj go po kodzie (np. „B.162”), nazwie, kodzie ICD-10 lub substancji. Włącz „Pełny tekst”, aby szukać w treści opisów programów (np. „NT-proBNP”) – trafienia zostaną podświetlone.</p></div>
+  </div>`;
+}
+function renderZespoly(){
+  const P=S.idx.programs;
+  $('#view').innerHTML=`<div class="crumb">Zarządzenie Prezesa NFZ – załączniki 9–101</div><h2 style="margin:6px 0 16px">Zespoły koordynacyjne</h2><div class="zlist">`+
+   S.idx.zespoly.map(z=>{const ps=P.filter(p=>p.zespoly.includes(z.key));const jk=(z.info||[]).find(i=>/jednostka koordynuj/i.test(i.k));
+    return `<div class="card"><h3>${esc(z.name)}</h3>${jk?`<div class="note" style="white-space:pre-line">Jednostka koordynująca: ${esc(jk.v)}</div>`:''}
+     <div class="ptags">${ps.map(p=>`<a href="#${slug(p.code)}">${esc(p.code)}</a>`).join('')||'<span class="note">brak powiązanego programu w obwieszczeniu</span>'}</div>
+     <div class="docs">${z.docs.map(d=>docLink(d,d.kind.startsWith('Zakres'))).join('')}</div>${zInfo(z)}</div>`}).join('')+'</div>';
+}
+function renderDocs(){
+  $('#view').innerHTML=`<div class="crumb">Zarządzenie Prezesa NFZ</div><h2 style="margin:6px 0 16px">Dokumenty wspólne</h2>
+   <div class="card"><div class="docs">${S.idx.commonDocs.map(d=>docLink(d)).join('')}</div></div>
+   <div class="card"><h3>Wymagania – część wspólna</h3>${S.idx.common.map(g=>`<h4>${esc(g.h)}</h4><table class="req">${g.rows.map(r=>'<tr>'+r.map(c=>`<td>${c}</td>`).join('')+'</tr>').join('')}</table>`).join('')}</div>`;
+}
+init();
+</script>
+</body>
+</html>

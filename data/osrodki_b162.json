@@ -1,0 +1,550 @@
+{
+ "zrodlo": "NFZ – Informator o umowach (API app-umw-api), umowy na 2026 r. zawierające produkt 03.0000.462.02, stan na 18.11.2026",
+ "osrodki": [
+  {
+   "kod": "3302028",
+   "nazwa": "\"MIEDZIOWE CENTRUM ZDROWIA\" S.A. W LUBINIE",
+   "miejscowosc": "LUBIN",
+   "oddzial": "01",
+   "woj": "dolnośląskie",
+   "nip": "6921009016",
+   "regon": "390360673",
+   "umowy": [
+    "03/5/3302028/01/2026/03"
+   ],
+   "etykieta": "\"MIEDZIOWE CENTRUM ZDROWIA\" S.A. W LUBINIE, Lubin",
+   "ulica": "ul. Marii Skłodowskiej-Curie 66",
+   "kod_pocztowy": "59-301",
+   "adres": "ul. Marii Skłodowskiej-Curie 66, 59-301 Lubin",
+   "telefon": "+48 76 846 01 10"
+  },
+  {
+   "kod": "3101109",
+   "nazwa": "UNIWERSYTECKI SZPITAL KLINICZNY IM. JANA MIKULICZA-RADECKIEGO WE WROCŁAWIU",
+   "miejscowosc": "WROCŁAW",
+   "oddzial": "01",
+   "woj": "dolnośląskie",
+   "nip": "8981816856",
+   "regon": "000289012",
+   "umowy": [
+    "03/5/3101109/01/2026/03"
+   ],
+   "etykieta": "UNIWERSYTECKI SZPITAL KLINICZNY IM. JANA MIKULICZA-RADECKIEGO WE WROCŁAWIU, Wrocław",
+   "ulica": "ul. Borowska 213",
+   "kod_pocztowy": "50-556",
+   "adres": "ul. Borowska 213, 50-556 Wrocław",
+   "telefon": "+48 71 733 16 00"
+  },
+  {
+   "kod": "20000810",
+   "nazwa": "SPZOZ 10 WOJSKOWY SZPITAL KLINICZNY Z POLIKLINIKĄ",
+   "miejscowosc": "BYDGOSZCZ",
+   "oddzial": "02",
+   "woj": "kujawsko-pomorskie",
+   "nip": "5540312510",
+   "regon": "090538318",
+   "umowy": [
+    "020000810260011"
+   ],
+   "etykieta": "SPZOZ 10 WOJSKOWY SZPITAL KLINICZNY Z POLIKLINIKĄ, Bydgoszcz",
+   "ulica": "Powstańców Warszawy 5",
+   "kod_pocztowy": "85-681",
+   "adres": "Powstańców Warszawy 5, 85-681 Bydgoszcz",
+   "telefon": "+48 261 417 001"
+  },
+  {
+   "kod": "20000671",
+   "nazwa": "SZPITAL UNIWERSYTECKI NR 1 IM. DR. ANTONIEGO JURASZA W BYDGOSZCZY",
+   "miejscowosc": "BYDGOSZCZ",
+   "oddzial": "02",
+   "woj": "kujawsko-pomorskie",
+   "nip": "5542231069",
+   "regon": "001126074",
+   "umowy": [
+    "020000671260008"
+   ],
+   "etykieta": "SZPITAL UNIWERSYTECKI NR 1 IM. DR. ANTONIEGO JURASZA W BYDGOSZCZY, Bydgoszcz",
+   "ulica": "M.Skłodowskiej-Curie 9",
+   "kod_pocztowy": "85-094",
+   "adres": "M.Skłodowskiej-Curie 9, 85-094 Bydgoszcz",
+   "telefon": "+48 52 585 42 80"
+  },
+  {
+   "kod": "20003633",
+   "nazwa": "SZPITAL UNIWERSYTECKI NR 2 IM. DR JANA BIZIELA W BYDGOSZCZY",
+   "miejscowosc": "BYDGOSZCZ",
+   "oddzial": "02",
+   "woj": "kujawsko-pomorskie",
+   "nip": "9532582266",
+   "regon": "340517145",
+   "umowy": [
+    "020003633260013"
+   ],
+   "etykieta": "SZPITAL UNIWERSYTECKI NR 2 IM. DR JANA BIZIELA W BYDGOSZCZY, Bydgoszcz",
+   "ulica": "Ujejskiego 75",
+   "kod_pocztowy": "85-168",
+   "adres": "Ujejskiego 75, 85-168 Bydgoszcz",
+   "telefon": "+48 52 365 57 99"
+  },
+  {
+   "kod": "20000773",
+   "nazwa": "WOJEWÓDZKI SZPITAL ZESPOLONY IM. L. RYDYGIERA W TORUNIU",
+   "miejscowosc": "TORUŃ",
+   "oddzial": "02",
+   "woj": "kujawsko-pomorskie",
+   "nip": "9561949580",
+   "regon": "000316068",
+   "umowy": [
+    "020000773260016"
+   ],
+   "etykieta": "WOJEWÓDZKI SZPITAL ZESPOLONY IM. L. RYDYGIERA W TORUNIU, Toruń",
+   "ulica": "Św. Józefa 53-59",
+   "kod_pocztowy": "87-100",
+   "adres": "Św. Józefa 53-59, 87-100 Toruń",
+   "telefon": "+48 56 679 35 00"
+  },
+  {
+   "kod": "30002952",
+   "nazwa": "CENTRUM ONKOLOGII ZIEMI LUBELSKIEJ IM. ŚW. JANA Z DUKLI",
+   "miejscowosc": "LUBLIN",
+   "oddzial": "03",
+   "woj": "lubelskie",
+   "nip": "7122135822",
+   "regon": "431219360",
+   "umowy": [
+    "030002952260012"
+   ],
+   "etykieta": "CENTRUM ONKOLOGII ZIEMI LUBELSKIEJ IM. ŚW. JANA Z DUKLI, Lublin",
+   "ulica": "Dr. K. Jaczewskiego 7",
+   "kod_pocztowy": "20-090",
+   "adres": "Dr. K. Jaczewskiego 7, 20-090 Lublin",
+   "telefon": "+48 81 454 10 00"
+  },
+  {
+   "kod": "30000091",
+   "nazwa": "UNIWERSYTECKI SZPITAL KLINICZNY NR 4 W LUBLINIE",
+   "miejscowosc": "LUBLIN",
+   "oddzial": "03",
+   "woj": "lubelskie",
+   "nip": "7122410926",
+   "regon": "000288751",
+   "umowy": [
+    "030000091260007"
+   ],
+   "etykieta": "UNIWERSYTECKI SZPITAL KLINICZNY NR 4 W LUBLINIE, Lublin",
+   "ulica": "Dra Kazimierza Jaczewskiego 8",
+   "kod_pocztowy": "20-090",
+   "adres": "Dra Kazimierza Jaczewskiego 8, 20-090 Lublin",
+   "telefon": "+4881 724 4226"
+  },
+  {
+   "kod": "30000089",
+   "nazwa": "WOJEWÓDZKI SZPITAL SPECJALISTYCZNY IM. STEFANA KARDYNAŁA WYSZYŃSKIEGO SAMODZIELNY PUBLICZNY ZAKŁAD OPIEKI ZDROWOTNEJ W LUBLINIE",
+   "miejscowosc": "LUBLIN",
+   "oddzial": "03",
+   "woj": "lubelskie",
+   "nip": "7122409395",
+   "regon": "431018940",
+   "umowy": [
+    "030000089260013"
+   ],
+   "etykieta": "WOJEWÓDZKI SZPITAL SPECJALISTYCZNY IM. STEFANA KARDYNAŁA WYSZYŃSKIEGO SAMODZIELNY PUBLICZNY ZAKŁAD OPIEKI ZDROWOTNEJ W LUBLINIE, Lublin",
+   "ulica": "Aleja Kraśnicka 100",
+   "kod_pocztowy": "20-718",
+   "adres": "Aleja Kraśnicka 100, 20-718 Lublin",
+   "telefon": "+48 81 537 42 29"
+  },
+  {
+   "kod": "040316",
+   "nazwa": "WIELOSPECJALISTYCZNY SZPITAL W NOWEJ SOLI",
+   "miejscowosc": "NOWA SÓL",
+   "oddzial": "04",
+   "woj": "lubuskie",
+   "nip": "9251723350",
+   "regon": "97077473300020",
+   "umowy": [
+    "0403/0051/26/I"
+   ],
+   "etykieta": "WIELOSPECJALISTYCZNY SZPITAL W NOWEJ SOLI, Nowa Sól",
+   "ulica": "ul. Chałubińskiego 7",
+   "kod_pocztowy": "67-100",
+   "adres": "ul. Chałubińskiego 7, 67-100 Nowa Sól",
+   "telefon": "+48 68 388 21 00"
+  },
+  {
+   "kod": "020293",
+   "nazwa": "105 KRESOWY SZPITAL WOJSKOWY Z PRZYCHODNIĄ SAMODZIELNY PUBLICZNY ZAKŁAD OPIEKI ZDROWOTNEJ W ŻARACH",
+   "miejscowosc": "ŻARY",
+   "oddzial": "04",
+   "woj": "lubuskie",
+   "nip": "9281739120",
+   "regon": "970327974",
+   "umowy": [
+    "0403/0066/26/I"
+   ],
+   "etykieta": "105 KRESOWY SZPITAL WOJSKOWY Z PRZYCHODNIĄ SAMODZIELNY PUBLICZNY ZAKŁAD OPIEKI ZDROWOTNEJ W ŻARACH, Żary",
+   "ulica": "ul. Domańskiego 2",
+   "kod_pocztowy": "68-200",
+   "adres": "ul. Domańskiego 2, 68-200 Żary",
+   "telefon": "+48 68 470 78 68"
+  },
+  {
+   "kod": "110006",
+   "nazwa": "INSTYTUT CENTRUM ZDROWIA MATKI POLKI",
+   "miejscowosc": "ŁÓDŹ",
+   "oddzial": "05",
+   "woj": "łódzkie",
+   "nip": "7292242712",
+   "regon": "471610127",
+   "umowy": [
+    "051/110006/03/050/26/3"
+   ],
+   "etykieta": "INSTYTUT CENTRUM ZDROWIA MATKI POLKI, Łódź",
+   "ulica": "ul. Rzgowska 281/289",
+   "kod_pocztowy": "93-338",
+   "adres": "ul. Rzgowska 281/289, 93-338 Łódź",
+   "telefon": "+48 422 711 741"
+  },
+  {
+   "kod": "110058",
+   "nazwa": "SAMODZIELNY PUBLICZNY ZAKŁAD OPIEKI ZDROWOTNEJ CENTRALNY SZPITAL KLINICZNY UNIWERSYTETU MEDYCZNEGO W ŁODZI",
+   "miejscowosc": "ŁÓDŹ",
+   "oddzial": "05",
+   "woj": "łódzkie",
+   "nip": "7282246128",
+   "regon": "472147559",
+   "umowy": [
+    "051/110058/03/050/26/3"
+   ],
+   "etykieta": "SAMODZIELNY PUBLICZNY ZAKŁAD OPIEKI ZDROWOTNEJ CENTRALNY SZPITAL KLINICZNY UNIWERSYTETU MEDYCZNEGO W ŁODZI, Łódź",
+   "ulica": "ul. Pomorska 251",
+   "kod_pocztowy": "92-213",
+   "adres": "ul. Pomorska 251, 92-213 Łódź",
+   "telefon": "+48 42 675 75 00"
+  },
+  {
+   "kod": "110014",
+   "nazwa": "SP ZOZ UNIWERSYTECKI SZPITAL KLINICZNY NR 2 UNIWERSYTETU MEDYCZNEGO W ŁODZI",
+   "miejscowosc": "ŁÓDŹ",
+   "oddzial": "05",
+   "woj": "łódzkie",
+   "nip": "7272392503",
+   "regon": "471208164",
+   "umowy": [
+    "051/110014/03/050/26/2"
+   ],
+   "etykieta": "SP ZOZ UNIWERSYTECKI SZPITAL KLINICZNY NR 2 UNIWERSYTETU MEDYCZNEGO W ŁODZI, Łódź",
+   "ulica": "ul. Stefana Żeromskiego 113",
+   "kod_pocztowy": "90-549",
+   "adres": "ul. Stefana Żeromskiego 113, 90-549 Łódź",
+   "telefon": "+48 42 639 34 22"
+  },
+  {
+   "kod": "110043",
+   "nazwa": "WOJEWÓDZKIE WIELOSPECJALISTYCZNE CENTRUM ONKOLOGII I TRAUMATOLOGII IM. M. KOPERNIKA W ŁODZI",
+   "miejscowosc": "ŁÓDŹ",
+   "oddzial": "05",
+   "woj": "łódzkie",
+   "nip": "7292345599",
+   "regon": "000295403",
+   "umowy": [
+    "051/110043/03/050/26/2"
+   ],
+   "etykieta": "WOJEWÓDZKIE WIELOSPECJALISTYCZNE CENTRUM ONKOLOGII I TRAUMATOLOGII IM. M. KOPERNIKA W ŁODZI, Łódź",
+   "ulica": "ul. Pabianicka 62",
+   "kod_pocztowy": "93-513",
+   "adres": "ul. Pabianicka 62, 93-513 Łódź",
+   "telefon": "+48 42 689 50 10"
+  },
+  {
+   "kod": "110016",
+   "nazwa": "WOJEWÓDZKI SPECJALISTYCZNY SZPITAL IM. DR WŁ. BIEGAŃSKIEGO",
+   "miejscowosc": "ŁÓDŹ",
+   "oddzial": "05",
+   "woj": "łódzkie",
+   "nip": "7262234808",
+   "regon": "471219736",
+   "umowy": [
+    "051/110016/03/050/26/1"
+   ],
+   "etykieta": "WOJEWÓDZKI SPECJALISTYCZNY SZPITAL IM. DR WŁ. BIEGAŃSKIEGO, Łódź",
+   "ulica": "ul. Kniaziewicza 1/5",
+   "kod_pocztowy": "91-347",
+   "adres": "ul. Kniaziewicza 1/5, 91-347 Łódź",
+   "telefon": "+48 422 516 059"
+  },
+  {
+   "kod": "061/100010",
+   "nazwa": "KRAKOWSKI SZPITAL SPECJALISTYCZNY IM. ŚW. JANA PAWŁA II",
+   "miejscowosc": "KRAKÓW",
+   "oddzial": "06",
+   "woj": "małopolskie",
+   "nip": "6771694570",
+   "regon": "000290073",
+   "umowy": [
+    "061/100010/SZP/05/2026/B"
+   ],
+   "etykieta": "KRAKOWSKI SZPITAL SPECJALISTYCZNY IM. ŚW. JANA PAWŁA II, Kraków",
+   "ulica": "ul. Prądnicka 80",
+   "kod_pocztowy": "31-202",
+   "adres": "ul. Prądnicka 80, 31-202 Kraków",
+   "telefon": "+48 12 614 20 00"
+  },
+  {
+   "kod": "061/100014",
+   "nazwa": "SAMODZIELNY PUBLICZNY ZAKŁAD OPIEKI ZDROWOTNEJ SZPITAL UNIWERSYTECKI W KRAKOWIE",
+   "miejscowosc": "KRAKÓW",
+   "oddzial": "06",
+   "woj": "małopolskie",
+   "nip": "6751199442",
+   "regon": "000288685",
+   "umowy": [
+    "061/100014/SZP/05/2026/D"
+   ],
+   "etykieta": "SAMODZIELNY PUBLICZNY ZAKŁAD OPIEKI ZDROWOTNEJ SZPITAL UNIWERSYTECKI W KRAKOWIE, Kraków",
+   "ulica": "ul. Marii Orwid 11",
+   "kod_pocztowy": "30-688",
+   "adres": "ul. Marii Orwid 11, 30-688 Kraków",
+   "telefon": "+48 12 424 70 00"
+  },
+  {
+   "kod": "70001285",
+   "nazwa": "NARODOWY INSTYTUT KARDIOLOGII STEFANA KARDYNAŁA WYSZYŃSKIEGO - PAŃSTWOWY INSTYTUT BADAWCZY",
+   "miejscowosc": "WARSZAWA",
+   "oddzial": "07",
+   "woj": "mazowieckie",
+   "nip": "5250008525",
+   "regon": "000837583",
+   "umowy": [
+    "070001285260603"
+   ],
+   "etykieta": "NARODOWY INSTYTUT KARDIOLOGII STEFANA KARDYNAŁA WYSZYŃSKIEGO - PAŃSTWOWY INSTYTUT BADAWCZY, Warszawa",
+   "ulica": "Alpejska 42",
+   "kod_pocztowy": "04-628",
+   "adres": "Alpejska 42, 04-628 Warszawa",
+   "telefon": "+48 22 343 44 50"
+  },
+  {
+   "kod": "70001062",
+   "nazwa": "PAŃSTWOWY INSTYTUT MEDYCZNY MINISTERSTWA SPRAW WEWNĘTRZNYCH I ADMINISTRACJI",
+   "miejscowosc": "WARSZAWA",
+   "oddzial": "07",
+   "woj": "mazowieckie",
+   "nip": "5214004558",
+   "regon": "524384845",
+   "umowy": [
+    "070001062260812"
+   ],
+   "etykieta": "PAŃSTWOWY INSTYTUT MEDYCZNY MINISTERSTWA SPRAW WEWNĘTRZNYCH I ADMINISTRACJI, Warszawa",
+   "ulica": "Wołoska 137",
+   "kod_pocztowy": "02-507",
+   "adres": "Wołoska 137, 02-507 Warszawa",
+   "telefon": "+48 477 222 000"
+  },
+  {
+   "kod": "70001194, 70001200",
+   "nazwa": "UNIWERSYTECKIE CENTRUM KLINICZNE WARSZAWSKIEGO UNIWERSYTETU MEDYCZNEGO",
+   "miejscowosc": "WARSZAWA",
+   "oddzial": "07",
+   "woj": "mazowieckie",
+   "nip": "5220002529",
+   "regon": "000288975",
+   "umowy": [
+    "070001194260611",
+    "070001200260607"
+   ],
+   "etykieta": "UNIWERSYTECKIE CENTRUM KLINICZNE WARSZAWSKIEGO UNIWERSYTETU MEDYCZNEGO, Warszawa",
+   "ulica": "Banacha 1A",
+   "kod_pocztowy": "02-097",
+   "adres": "Banacha 1A, 02-097 Warszawa",
+   "telefon": "+48 22 599 15 00"
+  },
+  {
+   "kod": "70060856",
+   "nazwa": "WOJSKOWY INSTYTUT MEDYCZNY - PAŃSTWOWY INSTYTUT BADAWCZY",
+   "miejscowosc": "WARSZAWA",
+   "oddzial": "07",
+   "woj": "mazowieckie",
+   "nip": "1132393221",
+   "regon": "015294487",
+   "umowy": [
+    "070060856260817"
+   ],
+   "etykieta": "WOJSKOWY INSTYTUT MEDYCZNY - PAŃSTWOWY INSTYTUT BADAWCZY, Warszawa",
+   "ulica": "Szaserów 128",
+   "kod_pocztowy": "04-141",
+   "adres": "Szaserów 128, 04-141 Warszawa",
+   "telefon": "+48 261 817 666"
+  },
+  {
+   "kod": "08R/10066",
+   "nazwa": "UNIWERSYTECKI SZPITAL KLINICZNY W OPOLU",
+   "miejscowosc": "OPOLE",
+   "oddzial": "08",
+   "woj": "opolskie",
+   "nip": "7542563619",
+   "regon": "53051239100023",
+   "umowy": [
+    "08R/10066/03/05/SZP/2026"
+   ],
+   "etykieta": "UNIWERSYTECKI SZPITAL KLINICZNY W OPOLU, Opole",
+   "ulica": "ul. Aleja Wincentego Witosa 26",
+   "kod_pocztowy": "45-401",
+   "adres": "ul. Aleja Wincentego Witosa 26, 45-401 Opole",
+   "telefon": "+48 77 452 07 45"
+  },
+  {
+   "kod": "09R/010037",
+   "nazwa": "WOJEWÓDZKI SZPITAL IM. ŚW.OJCA PIO W PRZEMYŚLU",
+   "miejscowosc": "PRZEMYŚL",
+   "oddzial": "09",
+   "woj": "podkarpackie",
+   "nip": "7952066984",
+   "regon": "000314684",
+   "umowy": [
+    "0901003703202605"
+   ],
+   "etykieta": "WOJEWÓDZKI SZPITAL IM. ŚW.OJCA PIO W PRZEMYŚLU, Przemyśl",
+   "ulica": "ul. Monte Cassino 18",
+   "kod_pocztowy": "37-700",
+   "adres": "ul. Monte Cassino 18, 37-700 Przemyśl",
+   "telefon": "+48 16 677 50 00"
+  },
+  {
+   "kod": "100000068",
+   "nazwa": "UNIWERSYTECKI SZPITAL KLINICZNY W BIAŁYMSTOKU",
+   "miejscowosc": "BIAŁYSTOK",
+   "oddzial": "10",
+   "woj": "podlaskie",
+   "nip": "5422534985",
+   "regon": "000288610",
+   "umowy": [
+    "100000068260022"
+   ],
+   "etykieta": "UNIWERSYTECKI SZPITAL KLINICZNY W BIAŁYMSTOKU, Białystok",
+   "ulica": "M.C.Skłodowskiej 24 A",
+   "kod_pocztowy": "15-276",
+   "adres": "M.C.Skłodowskiej 24 A, 15-276 Białystok",
+   "telefon": "(0-85) 831-80-00"
+  },
+  {
+   "kod": "000005",
+   "nazwa": "UNIWERSYTECKIE CENTRUM KLINICZNE",
+   "miejscowosc": "GDAŃSK",
+   "oddzial": "11",
+   "woj": "pomorskie",
+   "nip": "9570730409",
+   "regon": "000288640",
+   "umowy": [
+    "11/000005/SZP-Z/23/26"
+   ],
+   "etykieta": "UNIWERSYTECKIE CENTRUM KLINICZNE, Gdańsk",
+   "ulica": "ul. Dębinki 7",
+   "kod_pocztowy": "80-952",
+   "adres": "ul. Dębinki 7, 80-952 Gdańsk",
+   "telefon": "+48 58 349 20 00"
+  },
+  {
+   "kod": "121/100089",
+   "nazwa": "GÓRNOŚLĄSKIE CENTRUM MEDYCZNE IM. PROF. LESZKA GIECA ŚLĄSKIEGO UNIWERSYTETU MEDYCZNEGO W KATOWICACH",
+   "miejscowosc": "KATOWICE",
+   "oddzial": "12",
+   "woj": "śląskie",
+   "nip": "9542269625",
+   "regon": "001262860",
+   "umowy": [
+    "121/100089/03/5/2026S"
+   ],
+   "etykieta": "GÓRNOŚLĄSKIE CENTRUM MEDYCZNE IM. PROF. LESZKA GIECA ŚLĄSKIEGO UNIWERSYTETU MEDYCZNEGO W KATOWICACH, Katowice",
+   "ulica": "ul. Ziołowa 45-47",
+   "kod_pocztowy": "40-635",
+   "adres": "ul. Ziołowa 45-47, 40-635 Katowice",
+   "telefon": ""
+  },
+  {
+   "kod": "126/101003",
+   "nazwa": "ŚLĄSKIE CENTRUM CHORÓB SERCA W ZABRZU",
+   "miejscowosc": "ZABRZE",
+   "oddzial": "12",
+   "woj": "śląskie",
+   "nip": "6482302807",
+   "regon": "001071806",
+   "umowy": [
+    "126/101003/03/5/2026S"
+   ],
+   "etykieta": "ŚLĄSKIE CENTRUM CHORÓB SERCA W ZABRZU, Zabrze",
+   "ulica": "ul. Marii Curie-Skłodowskiej 9",
+   "kod_pocztowy": "41-800",
+   "adres": "ul. Marii Curie-Skłodowskiej 9, 41-800 Zabrze",
+   "telefon": "+48 32 479 38 00"
+  },
+  {
+   "kod": "130000233",
+   "nazwa": "WOJEWÓDZKI SZPITAL ZESPOLONY W KIELCACH",
+   "miejscowosc": "KIELCE",
+   "oddzial": "13",
+   "woj": "świętokrzyskie",
+   "nip": "9591291292",
+   "regon": "000289785",
+   "umowy": [
+    "130000233260008"
+   ],
+   "etykieta": "WOJEWÓDZKI SZPITAL ZESPOLONY W KIELCACH, Kielce",
+   "ulica": "Grunwaldzka 45",
+   "kod_pocztowy": "25-736",
+   "adres": "Grunwaldzka 45, 25-736 Kielce",
+   "telefon": "+48 41 367 13 00"
+  },
+  {
+   "kod": "140000774",
+   "nazwa": "WOJEWÓDZKI SZPITAL SPECJALISTYCZNY W OLSZTYNIE",
+   "miejscowosc": "OLSZTYN",
+   "oddzial": "14",
+   "woj": "warmińsko-mazurskie",
+   "nip": "7392955794",
+   "regon": "000293976",
+   "umowy": [
+    "140000774260001"
+   ],
+   "etykieta": "WOJEWÓDZKI SZPITAL SPECJALISTYCZNY W OLSZTYNIE, Olsztyn",
+   "ulica": "Żołnierska 18",
+   "kod_pocztowy": "10-561",
+   "adres": "Żołnierska 18, 10-561 Olsztyn",
+   "telefon": "+48 89 538 63 56"
+  },
+  {
+   "kod": "150003181",
+   "nazwa": "UNIWERSYTECKI SZPITAL KLINICZNY W POZNANIU",
+   "miejscowosc": "POZNAŃ-GRUNWALD",
+   "oddzial": "15",
+   "woj": "wielkopolskie",
+   "nip": "7792033466",
+   "regon": "000288834",
+   "umowy": [
+    "150003181260017"
+   ],
+   "etykieta": "UNIWERSYTECKI SZPITAL KLINICZNY W POZNANIU, Poznań-Grunwald",
+   "ulica": "Przybyszewskiego 49",
+   "kod_pocztowy": "60-355",
+   "adres": "Przybyszewskiego 49, 60-355 Poznań-Grunwald",
+   "telefon": "+48 61 869 11 00"
+  },
+  {
+   "kod": "160000749",
+   "nazwa": "UNIWERSYTECKI SZPITAL KLINICZNY NR 2 PUM W SZCZECINIE",
+   "miejscowosc": "SZCZECIN",
+   "oddzial": "16",
+   "woj": "zachodniopomorskie",
+   "nip": "9551908958",
+   "regon": "000288900",
+   "umowy": [
+    "160000749260010"
+   ],
+   "etykieta": "UNIWERSYTECKI SZPITAL KLINICZNY NR 2 PUM W SZCZECINIE, Szczecin",
+   "ulica": "Powstańców Wielkopolskich 72",
+   "kod_pocztowy": "70-111",
+   "adres": "Powstańców Wielkopolskich 72, 70-111 Szczecin",
+   "telefon": "+48 91 466 10 10 wew. 1010"
+  }
+ ]
+}
