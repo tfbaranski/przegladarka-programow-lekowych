@@ -10,12 +10,6 @@ Statyczna strona internetowa (HTML + JSON + PDF), bez serwera aplikacyjnego i ba
 - Lista ośrodków realizujących B.162 pochodzi z API NFZ „Informator o umowach” i obejmuje umowy na 2026 r. z kodem 03.0000.462.02.
 - Wersje offline: aktywne PDF-y i plik Excel.
 
-## Dashboard: pacjenci i wydatki w programach lekowych
-
-Katalog `dashboard/` (wersja polska) i `dashboard/en/` (wersja angielska) zawiera statyczny dashboard liczby pacjentów i wydatków NFZ w wybranych programach lekowych (B.6, B.44, B.59, B.75, B.88, B.101, B.125, B.128, B.129, B.156, B.157, B.159, B.162, B.163.FM, B.169, B.170 oraz RDTL). Pokazuje dane kwartalne od I kw. 2024 do II kw. 2026 w podziale na kraj, województwo, miasto i ośrodek, z mapą ośrodków. Źródła: pliki „Realizacja programów lekowych” NFZ, zestawienia ICD-10×EAN (Otwarte Dane NFZ) oraz raport „Programy lekowe”. Liczby dla ośrodków są szacunkami — metodologia jest opisana na stronie dashboardu.
-
-Adres po włączeniu GitHub Pages: `https://<login>.github.io/przegladarka-programow-lekowych/dashboard/`.
-
 ## Prywatność danych
 
 Dane wpisane w formularzach zapisują się wyłącznie w przeglądarce użytkownika (localStorage). Strona nie wysyła ich na żaden serwer.
